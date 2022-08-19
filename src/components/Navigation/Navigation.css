@@ -32,20 +32,17 @@
 @media screen and (max-width: 768px) {
   .navigation__container {
     width: 500px;
-    padding: 159px 0 90px;
   }
 }
   
 @media screen and (max-width: 450px) {
   .navigation__container {
     max-width: 320px;
-    padding: 144px 0 46px;
   }
 }
 
   @media screen and (max-width: 320px) {
     .navigation__container {
       max-width: 280px;
-      padding: 144px 0 46px;
     }
 }

@@ -6,7 +6,6 @@
   width: 100%;
   height: auto;
   padding: 0;
-  object-fit: cover;
 }
 
 .movies__card-container {
@@ -70,5 +69,10 @@
   .movies__card-movie-time {
     font-size: 10px;
     line-height: 13px;
+  }
+
+  .movies__card-container {
+    padding: 14px 0 29px;
+    border-bottom: #e8e8e8 1px solid;
   }
 } 

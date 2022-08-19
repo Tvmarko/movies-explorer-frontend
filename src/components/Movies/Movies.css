@@ -4,13 +4,13 @@
 
 @media screen and (max-width: 768px) {
   .movies {
-    width: calc(100% - 60px);
+    padding: 0 35px;
   }
 }
 
 @media screen and (max-width: 320px) {
   .movies {
-    width: calc(100% - 20px);
+    padding: 0 15px;
   }
 
   .movies__more-films {

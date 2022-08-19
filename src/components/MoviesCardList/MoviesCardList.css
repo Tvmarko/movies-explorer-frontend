@@ -42,14 +42,23 @@
   .moviescard-list__container  {
     grid-template-columns: repeat(2, minmax(270px, 1fr));
   }
+
+  .movies__button {
+    max-width: 520px;
+  }
 }
 
-@media screen and (max-width: 520px) {
-  .movies__card-list {
-    grid-auto-flow: column;
+@media screen and (max-width: 650px) {
+  .moviescard-list__container {
+    grid-auto-flow: row;
     max-width: 282px;
     grid-template-columns: 282px;
-    gap: 24px;
+    gap: 20px;
+    margin: 0 auto;
+  }
+
+  .movies__button {
+    max-width: 320px;
   }
 }
 
