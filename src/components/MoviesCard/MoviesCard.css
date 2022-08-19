@@ -1,0 +1,74 @@
+.movies__card {
+  padding: 0;
+}
+
+.movies__card-image {
+  width: 100%;
+  height: auto;
+  padding: 0;
+  object-fit: cover;
+}
+
+.movies__card-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0 29px;
+  border-bottom: #e8e8e8 1px solid;
+}
+
+.movies__card-title {
+  max-width: 220px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.movies__card-like-button {
+  width: 24px;
+  height: 24px;
+  background-color: #f5f5f5;
+  background-image: url("../../images/icon-saved-inactive.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.movies__card-like-button_saved {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  background-image: url("../../images/icon-delete.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  visibility: hidden;
+}
+
+.movies__card:hover .movies__card-like-button_saved{
+  visibility: visible;
+}
+
+.movies__card-like-button_liked {
+  background-image: url("../../images/icon-saved-active.svg");
+}
+
+.movies__card-movie-time {
+  margin: 6px 0 38px;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  color: #a0a0a0;
+}
+
+@media screen and (max-width: 320px) {
+  .movies__card-title {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .movies__card-movie-time {
+    font-size: 10px;
+    line-height: 13px;
+  }
+} 

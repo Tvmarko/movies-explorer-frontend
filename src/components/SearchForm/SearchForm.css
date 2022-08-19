@@ -1,0 +1,103 @@
+.search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 80px 0 83px;
+  border-bottom: 1px solid #e8e8e8;
+  width: 100%;
+}
+
+.search__container {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+  margin: 0 0 40px;
+  border: #e8e8e8 1px solid;
+  border-radius: 50px;
+  width: 80.5%;
+}
+
+.search__input {
+  width: 100%;
+  padding: 0 22px;
+  font-size: 14px;
+  line-height: 18px;
+  outline: none;
+  border: none;
+}
+
+.search__input::placeholder {
+  color: #a0a0a0;
+}
+
+.search__button {
+  width: 34px;
+  height: 34px;
+  margin: 6px;
+  background: #3456f3 url('../../images/FindButton.svg') center no-repeat;
+  border-radius: 48px;
+  border: none;
+}
+
+.search__toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 40px;
+}
+
+.search__films {
+  margin: 0 0 0 12px;
+  padding-right: 14px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.search__tumbler {
+  display: inline-block;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  filter: drop-shadow(0 2px 2px #e5e5e8);
+  cursor: pointer;
+}
+
+.search__checkbox {
+  display: none;
+}
+
+.search__slider {
+  position: absolute;
+  background-color:#2be080;
+  border-radius: 16px;
+  transition: .6s;
+  transform: scale(-1, -1);
+  inset: 0;
+}
+
+.search__slider::before {
+  position: absolute;
+  height: 16px;
+  width: 16px;
+  left: 1px;
+  bottom: 1px;
+  content: "";
+  border: 1px solid #2be080;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.search__checkbox:checked + .search__slider {
+  background-color: #2be080;
+}
+
+.search__checkbox:checked + .search__slider::before {
+  transform: translateX(16px);
+}
+
+@media screen and (max-width: 450px) {
+  .search__container {
+    width: 45%;
+  }
+}
