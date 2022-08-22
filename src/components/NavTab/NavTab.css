@@ -31,12 +31,8 @@
   font-size: 13px;
   line-height: 16px;
   color: #fff;
-  padding: 10px 20px;
+  padding: 0 20px;
   text-decoration:underline #a0a0a0;; 
-}
-
-.navtab__link:last-of-type {
-  margin-right: 0;
 }
 
 .navtab__link:hover {
@@ -44,10 +40,3 @@
   transition: color .2s linear 0s;
 }
 
-@media screen and (max-width: 768px) {
-  .navtab__link {
-    padding: 10px;
-    margin-right: 4px;
-    
-  }
-} 

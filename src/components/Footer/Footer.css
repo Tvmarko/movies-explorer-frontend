@@ -19,6 +19,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000;
 }
 
 .footer__year {
@@ -34,9 +38,6 @@
 
 .footer__link {
   margin-left: 20px;
-  font-weight: 400;
-  font-size: 13px;
-  line-height: 16px;
   color: #000;
 }
 
@@ -44,7 +45,13 @@
   margin-right: 0;
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 79px 50px 20px;
+  }
+}
+
+@media screen and (max-width: 550px) {
   .footer {
     padding: 80px 10px 10px;
   }

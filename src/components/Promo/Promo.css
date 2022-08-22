@@ -38,10 +38,35 @@
   
   @media screen and (max-width: 768px) {
     .promo__title {
-      width: 430px;
+      max-width: 730px;
+    }
+  } 
+  
+  @media screen and (max-width: 670px) {
+    .promo__title {
+      width: 510px;
+      font-size: 40px;
+      line-height: 48px;
+    }
+  } 
+
+  @media screen and (max-width: 520px) {
+    .promo__title {
+      width: 350px;
       font-size: 30px;
       line-height: 38px;
     }
   } 
-  
-  
+
+  @media screen and (max-width: 355px) {
+    .promo__title {
+      width: 310px;
+      font-size: 30px;
+      line-height: 38px;
+    }
+
+    .promo__logo {
+      width: 280px;
+      height: 280px;
+    }
+  } 

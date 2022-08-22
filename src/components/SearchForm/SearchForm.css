@@ -18,7 +18,7 @@
 }
 
 .search__input {
-  width: 100%;
+  width: 60.5%;
   padding: 0 22px;
   font-size: 14px;
   line-height: 18px;
@@ -33,10 +33,9 @@
 .search__button {
   width: 34px;
   height: 34px;
-  margin: 6px;
-  background: #3456f3 url('../../images/FindButton.svg') center no-repeat;
-  border-radius: 48px;
+  background: url('../../images/FindButton.svg') center no-repeat;
   border: none;
+  border-radius: 48px;
 }
 
 .search__toggle {
@@ -70,7 +69,7 @@
 .search__slider {
   position: absolute;
   background-color:#2be080;
-  border-radius: 16px;
+  border-radius: 20px;
   transition: .6s;
   transform: scale(-1, -1);
   inset: 0;
@@ -89,28 +88,46 @@
 }
 
 .search__checkbox:checked + .search__slider {
-  background-color: #2be080;
+  background-color: #fff;
+  border: 1px solid #2be080;
 }
 
 .search__checkbox:checked + .search__slider::before {
   transform: translateX(16px);
+  background-color: #2be080;
 }
 
 @media screen and (max-width: 768px) {
   .search {
-    max-width: 500px;
+    padding: 60px 0 57px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .search__container {
+    width: 100%;
+  }
+
+  .search__toggle {
+    margin-top: 38px;
   }
 }
 
 @media screen and (max-width: 450px) {
-  .search {
-    max-width: 320px;
-  }
-
   .search__films {
     padding-right: 12px;
     font-size: 12px;
     font-weight: 400;
     line-height: 15px;
+  }
+
+  .search__button {
+    width: 26px;
+    height: 26px;
+    background: url('../../images/FindButton.svg') center no-repeat;
+    border: none;
+    border-radius: 48px;
   }
 }

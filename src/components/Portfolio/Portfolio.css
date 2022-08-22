@@ -30,14 +30,26 @@
     border-bottom: 1px solid #e6e6e6;
   }
 
-  .portfolio__link-arrow:hover {
-    opacity: 0.6;
+  @media screen and (max-width: 768px) {
+    .portfolio {
+      padding: 0 50px 90px;
+    }
+
+    .portfolio__link {
+      font-size: 28px;
+    }
   }
-  
-  @media screen and (max-width: 350px) {
+
+  @media screen and (max-width: 550px) {
+    .portfolio__link {
+      font-size: 18px;
+    }
+  }
+
+  @media screen and (max-width: 420px) {
     .portfolio__link {
       font-size: 12px;
       line-height: 15px;
-      height: 16px;
+      height: 49px;
     }
   }

@@ -1,29 +1,47 @@
 import React from "react";
 import "./Navigation.css";
 import { Link, useRouteMatch } from "react-router-dom";
-import iconProfile from "../../images/profile.svg";
 
-function Navigation() {
+function Navigation({ toggleMenu, isMenuOpen }) {
   const isMovies = useRouteMatch({ path: "/movies", exact: false });
   const isSavedMovies = useRouteMatch({ path: "/saved-movies", exact: false });
+
   return(
-    <div className="navigation__container">
-        <div className="navigation__films">
-          <Link
-            className={`navigation__movies link ${isMovies ? "link_active" : ""}`}
-            to="/movies">
-            Фильмы
-          </Link>
-          <Link
-            className={`navigation__saved-movies link ${isSavedMovies ? "link_active" : ""}`}
-            to="/saved-movies">
-            Сохранённые фильмы
-          </Link>
+    <nav className="navigation" >
+      <button className="navigation__button-menu btn" type="button" onClick={toggleMenu}></button>
+      <div className={`navigation__container ${isMenuOpen ? 'navigation__container_active' : ''}`}> 
+      <div className="navigation__popup-menu">
+        <div className="navigation__list-container">
+          <button className="navigation__button-close btn" type="button" onClick={toggleMenu}></button>
+          <ul className="navigation__items">
+            <li className="navigation__item navigation__item_main">
+              <Link className="navigation__item-link link" to="/">
+                Главная
+              </Link>
+            </li>
+            <li className="navigation__item">
+              <Link
+                className={`navigation__item-link link ${isMovies ? "link_active" : ""}`}
+                to="/movies">
+                Фильмы
+              </Link>
+            </li>
+            <li className="navigation__item">
+              <Link
+                className={`navigation__item-link link ${isSavedMovies ? "link_active" : ""}`}
+                to="/saved-movies">
+                Сохранённые фильмы
+              </Link>
+            </li>
+          </ul>
         </div>
-        <Link className="navigation__profile link" to="/profile">
-          <img className="profile__icon link" alt="Аккаунт-значок" src={iconProfile}></img>
+        <Link to="/profile" 
+          className="navigation__profile link">
+            Аккаунт<span className={`header__account-icon ${isMenuOpen ? "profile2": "profile"}`}></span>
         </Link>
+       </div>
       </div>
+    </nav>
   );
 }
 

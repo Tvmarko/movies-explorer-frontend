@@ -4,6 +4,12 @@ import "./Header.css";
 import Navigation from "../Navigation/Navigation";
 
 function Header() {
+  const [isMenuOpen, setMenuOpen] = React.useState(false);
+
+  function toggleMenu() {
+    setMenuOpen(!isMenuOpen);
+  }
+
   const isMain = useRouteMatch({ path: "/", exact: true });
 
   return (
@@ -23,7 +29,7 @@ function Header() {
           </div>
         </Route>
         <Route path={["/movies", "/saved-movies", "/profile"]}>
-          <Navigation />
+          <Navigation toggleMenu={toggleMenu} isMenuOpen={isMenuOpen}  />
         </Route>
       </Switch>
     </header>
