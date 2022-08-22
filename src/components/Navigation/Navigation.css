@@ -76,6 +76,8 @@
   width: 26px;
   height: 30px;
   margin-left: 17px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .profile {

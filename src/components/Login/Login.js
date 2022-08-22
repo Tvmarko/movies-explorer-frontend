@@ -29,7 +29,7 @@ function Login() {
           />
         <p className="form__error form__error-text ">Что-то пошло не так...</p>
       </label>
-      <button className="form__button form__button_padding" type="submit">
+      <button className="form__button form__button_login" type="submit">
         Войти
       </button>
     </Form>

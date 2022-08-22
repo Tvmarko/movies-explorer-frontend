@@ -7,7 +7,7 @@ function Profile() {
   function handleSubmit(evt) {
     evt.preventDefault();
   }
-  
+
   return (
     <section className="profile">
       <form className="profile__form" onSubmit={handleSubmit}>
@@ -24,8 +24,8 @@ function Profile() {
           </div>
         </div>
       </form>
-        <Link to="/profile" className="profile__button btn" type="submit">Редактировать</Link>
-        <Link to="/" className="profile__sign-out btn" type="button">Выйти из аккаунта</Link>
+        <Link to="/profile" className="profile__button btn link" type="submit">Редактировать</Link>
+        <Link to="/" className="profile__sign-out btn link" type="button">Выйти из аккаунта</Link>
     </section>
   );
 };
