@@ -11,7 +11,7 @@
   font-size: 22px;
   line-height: 27px;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
 }
   
 .about-project__info {
@@ -53,7 +53,7 @@
   margin-bottom: 26px;
   font-size: 20px;
   line-height: 24px;
-  font-weight: normal;
+  font-weight: 400;
 }
   
 .about-project__info-text {
@@ -164,20 +164,38 @@
 
 @media screen and (max-width: 450px) {
   .about-project  {
-    padding: 80px 30px;
+    padding: 70px 18px;
+  }
+
+  .about-project__title {
+    padding-bottom: 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .about-project__info {
+    padding-top: 60px;
+  }  
+
+  .about-project__info-container {
+    flex-direction: column;
+  }
+
+  .about-project__info-section {
+    width: 284px;
+    margin: 0 0 56px;
   }
 
   .about-project__info-title {
-    margin-bottom: 20px;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: normal;
+    margin-bottom: 16px;
+    font-size: 18px;
+    line-height: 22px;
   }
 
   .about-project__time {
-    margin-top: 83px;
-    font-size: 10px;
-    line-height: 12px;
+    margin-top: 0;
+    font-size: 11px;
+    line-height: 13px;
   }
 
   .about-project__time-backend {
@@ -186,5 +204,13 @@
   
   .about-project__time-frontend {
     max-width: 250px;
+  }
+
+  .about-project__time-backend-item {
+    margin-bottom: 10px;
+  }
+  
+  .about-project__time-frontend-item {
+    margin-bottom: 10px;
   }
 }

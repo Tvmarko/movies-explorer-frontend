@@ -17,7 +17,7 @@
     align-items: center;
     margin: 0;
     padding: 0;
-    width: 730px;
+    max-width: 730px;
     flex-grow: 1;
     font-size: 50px;
     line-height: 58px;
@@ -38,7 +38,7 @@
   
   @media screen and (max-width: 768px) {
     .promo__title {
-      max-width: 730px;
+      max-width: 510px;
     }
   } 
   
@@ -53,20 +53,20 @@
   @media screen and (max-width: 520px) {
     .promo__title {
       width: 350px;
-      font-size: 30px;
-      line-height: 38px;
+      font-size: 31px;
+      line-height: 39px;
     }
   } 
 
   @media screen and (max-width: 355px) {
     .promo__title {
-      width: 310px;
-      font-size: 30px;
-      line-height: 38px;
+      width: 300px;
+      font-size: 31px;
+      line-height: 39px;
     }
 
     .promo__logo {
-      width: 280px;
-      height: 280px;
+      width: 248px;
+      height: 248px;
     }
   } 

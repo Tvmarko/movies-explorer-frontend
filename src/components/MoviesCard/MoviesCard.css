@@ -60,7 +60,7 @@
   color: #a0a0a0;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 670px) {
   .movies__card-title {
     font-size: 12px;
     line-height: 15px;
@@ -69,10 +69,10 @@
   .movies__card-movie-time {
     font-size: 10px;
     line-height: 13px;
+    margin: 6px 0 34px;
   }
 
   .movies__card-container {
-    padding: 14px 0 29px;
-    border-bottom: #e8e8e8 1px solid;
+    padding: 0 0 29px;
   }
 } 

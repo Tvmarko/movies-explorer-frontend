@@ -1,8 +1,9 @@
 .moviescard-list {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
+  padding: 0;
   justify-content: center;
   justify-items: center;
 }
@@ -59,13 +60,21 @@
   }
 }
 
-@media screen and (max-width: 670px) {
+@media screen and (max-width: 650px) {
   .moviescard-list__container {
+    padding-top: 40px;
     grid-auto-flow: row;
-    max-width: 282px;
-    grid-template-columns: 282px;
-    gap: 20px;
+    max-width: 300px;
+    grid-template-columns: 300px;
     margin: 0 auto;
+  }
+
+  .more-movies-card {
+    padding: 50px 0 80px;
+  }
+
+  .movies__button {
+    max-width: 200px;
   }
 }
 

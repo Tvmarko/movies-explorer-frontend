@@ -80,7 +80,7 @@
   background-position: center;
 }
 
-.profile {
+.account {
   background: #f5f5f5 url('../../images/icon-account.svg') center no-repeat;
 }
 
@@ -145,7 +145,7 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 24px;
-  }
+    }
 
   .navigation__item-link:hover {
     border-bottom: 2px solid #000000;
@@ -164,7 +164,7 @@
     padding-right: 6px;
   }
 
-  .profile2 {
+  .account2 {
     background: #f5f5f5 url('../../images/icon-account2.svg') center no-repeat;
   }
    

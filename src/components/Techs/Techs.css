@@ -69,14 +69,19 @@
     padding: 90px 50px;
   }
 
+  .techs__title {
+    max-width: 600px;
+  }
+
   .techs__text {
     margin-bottom: 83px;
     font-size: 12px;
     line-height: 18px;
+    max-width: 460px;
   }
   
   .techs__container {
-    grid-template-columns: repeat(7, minmax(80px, 1fr));
+    grid-template-columns: repeat(7, minmax(70px, 1fr));
   }
 
   .techs__cell {
@@ -103,6 +108,7 @@
     margin-bottom: 83px;
     font-size: 12px;
     line-height: 18px;
+    max-width: 320px;
   }
   
   .techs__container {
@@ -122,25 +128,31 @@
 } 
 
 @media screen and (max-width: 500px) {
+  .techs {
+    padding: 70px 18px;
+  }
+  
   .techs__title {
     max-width: 320px;
-    padding-top: 83px;
-    font-size: 40px;
-    line-height: 48px;
+    padding-top: 60px;
+    font-size: 30px;
+    line-height: 36px;
   }
 
   .techs__text {
-    margin-bottom: 83px;
-    font-size: 12px;
-    line-height: 18px;
+    margin-bottom: 50px;
+    font-size: 11px;
+    line-height: 16px;
+    max-width: 292px;
   }
   
   .techs__container {
-    grid-template-columns: repeat(4, minmax(60px, 1fr));
+    grid-template-columns: repeat(2, minmax(84px, 1fr));
+    padding: 0 71px;
   }
 
   .techs__cell {
-    min-height: 45px;
+    min-height: 57px;
   }
 } 
 

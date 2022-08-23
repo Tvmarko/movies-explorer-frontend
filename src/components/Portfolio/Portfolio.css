@@ -42,14 +42,24 @@
 
   @media screen and (max-width: 550px) {
     .portfolio__link {
-      font-size: 18px;
+      font-size: 22px;
     }
   }
 
   @media screen and (max-width: 420px) {
+    .portfolio {
+      padding: 0 14px 70px;
+    }
+
+    .portfolio__title {
+      margin: 0 0 40px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
     .portfolio__link {
-      font-size: 12px;
-      line-height: 15px;
+      font-size: 18px;
+      line-height: 28px;
       height: 49px;
     }
   }

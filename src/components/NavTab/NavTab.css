@@ -40,3 +40,10 @@
   transition: color .2s linear 0s;
 }
 
+@media screen and (max-width: 350px) {
+  .navtab__link {
+    font-size: 11px;
+    padding: 0 12px;
+  }
+}
+

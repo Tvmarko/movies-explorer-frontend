@@ -37,7 +37,7 @@ function Navigation({ toggleMenu, isMenuOpen }) {
         </div>
         <Link to="/profile" 
           className="navigation__profile link">
-            Аккаунт<span className={`header__account-icon ${isMenuOpen ? "profile2": "profile"}`}></span>
+            Аккаунт<span className={`header__account-icon ${isMenuOpen ? "account2": "account"}`}></span>
         </Link>
        </div>
       </div>

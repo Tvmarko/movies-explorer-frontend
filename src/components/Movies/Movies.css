@@ -8,13 +8,8 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 650px) {
   .movies {
-    padding: 0 15px;
-  }
-
-  .movies__more-films {
-    min-width: 240px;
-    padding: 11px 20px 9px;
+    padding: 10px;
   }
 } 

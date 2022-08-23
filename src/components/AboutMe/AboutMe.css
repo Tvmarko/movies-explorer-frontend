@@ -8,7 +8,7 @@
   border-bottom: 1px solid #000;
   font-size: 22px;
   line-height: 27px;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 .about-me__info-container {
@@ -30,8 +30,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 600px;
     min-height: 327px;
+    max-width: 600px;
   }
   
   .about-me__name {
@@ -90,8 +90,7 @@
     }
 
     .about-me__description-container {
-      min-height: 315px;
-      width: 364px;
+       max-width: 364px;
     }
   
     .about-me__name {
@@ -112,7 +111,7 @@
 
   @media screen and (max-width: 750px) {
     .about-me {
-      padding: 80px 30px;
+      padding: 70px 30px;
     }
     .about-me__info-container {
       flex-direction: column;
@@ -122,12 +121,6 @@
     .about-me__photo {
       width: 255px;
       height: 315px;
-    }
-  
-    .about-me__description-container {
-      min-height: 315px;
-      width: 364px;
-      text-align: center;
     }
   
     .about-me__name {
@@ -147,7 +140,7 @@
     }
 
     .about-me__social-links {
-      text-align: center;
+      text-align: start;
       margin: 0 auto;
       padding-top: 20px;
     }
@@ -155,45 +148,56 @@
 
   @media screen and (max-width: 420px) {
     .about-me {
-      padding: 60px 30px;
+      padding: 70px 14px;
+    }
+
+    .about-me__title {
+      padding-bottom: 28px;
+      font-size: 18px;
+      line-height: 22px;
     }
     
     .about-me__info-container {
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     }
 
     .about-me__photo {
-      width: 255px;
-      height: 315px;
+      width: 292px;
+      height: 352px;
     }
   
     .about-me__description-container {
       min-height: 310px;
-      width: 310px;
-      text-align: center;
+      max-width: 292px;
+      text-align: start;
     }
   
     .about-me__name {
-      font-size: 40px;
-      line-height: 40px;
-      padding-top: 30px;
+      font-size: 30px;
+      line-height: 36px;
+      padding-top: 40px;
     }
   
     .about-me__job {
-      font-size: 12px;
-      line-height: 18px;
+      font-size: 11px;
+      line-height: 16px;
     }
   
     .about-me__description {
-      font-size: 12px;
-      line-height: 18px;
+      font-size: 11px;
+      line-height: 16px;
     }
 
     .about-me__social-links {
-      text-align: center;
+      align-items: flex-start;
       margin: 0 auto;
       padding-top: 20px;
+      max-width: 292px;
+    }
+
+    .about-me__social-link {
+     text-align: start;
     }
   }
 
