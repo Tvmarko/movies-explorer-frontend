@@ -8,7 +8,7 @@ class Api {
         this._handleRequest  = handleRequest ;
     }
 
-    login(email, password) {
+    login = (email, password) => {
         return this._handleRequest ('signin', {
             method: 'POST',
             headers: {
@@ -21,7 +21,7 @@ class Api {
         })
     }
 
-    register(name, email, password) {
+    register = (name, email, password) => {
         return this._handleRequest ('signup', {
             method: 'POST',
             headers: {
@@ -83,13 +83,6 @@ class Api {
         return this._handleRequest (`movies/${movieId}`, {
             method: 'DELETE',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
-        });
-    }
-
-    checkToken (token) {
-        return this._handleRequest ('users/me', {
-            method: 'GET',
-            headers: {authorization: `Bearer ${token}`, ...this._headers}
         });
     }
 }

@@ -29,34 +29,18 @@ function App() {
    
   useEffect(() => {
     checkToken();
-    history.push("/");
+    history.push('/movies');
     if (loggedIn) {
       mainApi.getUser()
-        .then(({userData}) => {
-        setCurrentUser({userData});
-  })
-      .catch((err) => {
+      .then((userData) => {
+        setCurrentUser(userData);
+      })
+        .catch((err) => {
         console.log(err);
       });
     }
   }, [loggedIn, history]);
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if(token){
-      mainApi.checkToken(token)
-        .then((res) => {
-          if(res){
-            checkToken();
-            history.push("/movies");
-          }
-        })
-        .catch((err) => {
-          console.log(err); 
-        });
-    }
-  }, [history]);
-  
   useEffect(() => {
     if (loggedIn && location.pathname === "/movies") {
         setIsLoading(true);
@@ -66,7 +50,7 @@ function App() {
                    localStorage.setItem("movies",
                        JSON.stringify(res.filter((item) => (item.image && item.country && item.nameEN && item.director && item.trailerLink.startsWith('http'))))
                    );
-                   setMovies(JSON.parse(localStorage.getItem('movies')));
+                   setMovies(JSON.parse(localStorage.getItem("movies")));
                    setFindMovies(true);
                 } else {
                    setFindMovies(false);
@@ -83,13 +67,13 @@ function App() {
 }, [loggedIn, location]);
 
 useEffect(() => {
-  if (loggedIn && (location.pathname === '/saved-movies' || location.pathname === '/movies')) {
+  if (loggedIn && (location.pathname === "/saved-movies")) {
           mainApi.getMovies()
               .then((res) => {
                   if (res.length) {
                       const ownerSavedMovies = res.filter(item => (item.owner === currentUser._id));
-                      localStorage.setItem('savedMovies', JSON.stringify(ownerSavedMovies));
-                      setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
+                      localStorage.setItem("savedMovies", JSON.stringify(ownerSavedMovies));
+                      setSavedMovies(JSON.parse(localStorage.getItem("savedMovies")));
                       setFindSavedMovies(true);
                   } else {
                       setFindSavedMovies(false);
@@ -105,18 +89,18 @@ useEffect(() => {
   }
 }, [loggedIn, location, currentUser]);
 
-function onSearchSubmit(movie) {
+function searchMovies(movie) {
   if (movie) {
       let token;
       let setAllMovies;
       let setFind;
 
-      if (location.pathname === '/movies') {
-          token = 'movies';
+      if (location.pathname === "/movies") {
+          token = "movies";
           setAllMovies = setMovies;
           setFind = setFindMovies;
       } else {
-          token = 'savedMovies';
+          token = "savedMovies";
           setAllMovies = setSavedMovies;
           setFind = setFindSavedMovies;
       }
@@ -136,8 +120,8 @@ function onSearchSubmit(movie) {
 function saveMovie(movie) {
   mainApi.addMovie(movie)
       .then((newSavedMovie) => {
-        setSavedMovies([JSON.parse(localStorage.getItem('savedMovies')), ...savedMovies]); 
-          localStorage.setItem('savedMovies', JSON.stringify(newSavedMovie));
+        setSavedMovies([JSON.parse(localStorage.getItem("savedMovies")), ...savedMovies]); 
+          localStorage.setItem("savedMovies", JSON.stringify(newSavedMovie));
        })
       .catch((err) => {
           console.log(`Не удалось сохранить фильм: ${err}`);
@@ -148,9 +132,9 @@ function deleteMovie(movie) {
   mainApi.deleteMovie(movie.movieId)
       .then(() => {
           const res = savedMovies.filter((item) => item.movieId !== movie.movieId);
-          setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
-          localStorage.setItem('savedMovies', JSON.stringify(res));
-          if (!JSON.parse(localStorage.getItem('savedMovies')).length)
+          setSavedMovies(JSON.parse(localStorage.getItem("savedMovies")));
+          localStorage.setItem("savedMovies", JSON.stringify(res));
+          if (!JSON.parse(localStorage.getItem("savedMovies")).length)
               setFindSavedMovies(false);
       })
         .catch((err) => {
@@ -175,8 +159,8 @@ function editProfile(user) {
 
 function handleRegister({name, email, password}) {
  mainApi.register(name, email, password)
- .then((res) => {
-    if(res){
+ .then((user) => {
+    if(user){
     history.push("/sign-in");
     } 
   })
@@ -191,8 +175,7 @@ function handleLogin({email, password}) {
     if(data.token){
       localStorage.setItem('jwt', data.token);
       checkToken();
-        history.push('/movies');
-    }
+      }
   })
     .catch((err) => {
     console.log(err); 
@@ -200,7 +183,7 @@ function handleLogin({email, password}) {
   }
 
 function checkToken() {
-  const jwt = localStorage.getItem('jwt');
+  const jwt = localStorage.getItem("jwt");
   if (jwt) {
     setLoggedIn(true);
   }
@@ -208,14 +191,14 @@ function checkToken() {
 
   function handleSignOut() {
     setLoggedIn(false);
-    localStorage.removeItem('jwt');
+    localStorage.removeItem("jwt");
     setMovies([]);
     setSavedMovies([]);
     setCurrentUser({});
     history.push('/');
   }
 
-function onSearchShortMovies() {
+function searchShortMovies() {
   setIsShortMovies(!isShortMovies);
 }
 
@@ -241,7 +224,7 @@ function  likeMovie(movie) {
                       isLoading={isLoading}
                       isLikedMovie={ likeMovie}
                       findMovies={findMovies}
-                      searchMovies={{ isShortMovies, onSearchSubmit, onSearchShortMovies }}
+                      searchMovies={{ isShortMovies, searchMovies, searchShortMovies }}
                       saveMovie={saveMovie}
                       deleteMovie={deleteMovie}
                       component={Movies}>
@@ -252,7 +235,7 @@ function  likeMovie(movie) {
                       savedMovies={savedMovies}
                       isLoading={isLoading}
                       findSavedMovies={findSavedMovies}
-                      searchMovies={{ isShortMovies, onSearchSubmit, onSearchShortMovies }}
+                      searchMovies={{ isShortMovies, searchMovies, searchShortMovies }}
                       deleteMovie={deleteMovie}
                       component={SavedMovies}>
               </ProtectedRoute>
