@@ -3,7 +3,7 @@ import { Route, Link, Switch, useRouteMatch } from "react-router-dom";
 import "./Header.css";
 import Navigation from "../Navigation/Navigation";
 
-function Header() {
+function Header({loggedIn}) {
   const [isMenuOpen, setMenuOpen] = React.useState(false);
 
   function toggleMenu() {

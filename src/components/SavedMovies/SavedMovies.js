@@ -1,42 +1,44 @@
 import React from "react";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
-import image1 from "../../images/pic1.svg";
-import image2 from "../../images/pic2.svg";
-import image3 from "../../images/pic3.svg";
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import Preloader from "../Preloader/Preloader";
 
-function SavedMovies() {
-  const savedMovies = [
-      {
-        image: image1,
-        title: "Название Фильма",
-        time: "1ч 42м",
-        _id: 1,
-        saved: true,
-      },
-      {
-        image: image2,
-        title: "Название Фильма",
-        time: "1ч 42м",
-        _id: 2,
-        saved: true,
-      },
-      {
-        image: image3,
-        title: "Название Фильма",
-        time: "1ч 42м",
-        _id: 3,
-        saved: true,
-      },
-    ]
+function SavedMovies(props) {
+  const {
+    findSavedMovies,
+    savedMovies,
+    isLoading,
+      searchMovies,
+     deleteMovie,
+    } = props;
+
+    function handleDelete(movie) {
+      const movieForDelete = savedMovies.forEach((item) => {
+          if (+item.movieId === movie.id)
+              deleteMovie(movieForDelete[0]);
+      });
+    }
 
   return (
+<>
+      <Header />
     <main className="movies">
-      <SearchForm />
-      <MoviesCardList movies={savedMovies} buttonMore={false}/>
-      <div className="more-movies-card"></div>
+      <SearchForm searchMovies={searchMovies}/>
+      {isLoading ? <Preloader /> : (
+              findSavedMovies && (
+      <MoviesCardList 
+      movies={savedMovies} 
+      handleMovie={handleDelete} 
+           />
+         )
+        )}
+        <div className="more-movies-card"></div>
     </main>
-  )
-} 
+    <Footer />
+    </>
+  );
+}
 
 export default SavedMovies

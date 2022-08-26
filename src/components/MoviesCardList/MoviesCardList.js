@@ -1,33 +1,61 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
-import Preloader from "../Preloader/Preloader";
 
-function MoviesCardList({movies, buttonMore}) {
-  const [isLoading, setLoading] = useState(false);
+function MoviesCardList(props) {
+  const {
+    movies,
+    handleMovie,
+    pathSavedMovie = false,
+    isLikedMovie,
+} = props;
 
-  function handlePreloader() {
-  setLoading(true);
-}
+  const [movieCards, setMovieCards] = useState(0);
+  const [moreMovieCards, setMoreMovieCards] = useState(0);
+    
+  useEffect(() => {
+    function  widthCheck() {
+    const width = window.innerWidth;
+
+      if (width > 1270) {
+        setMovieCards(12);
+        setMoreMovieCards(4);
+      } else if (width <= 1270 && width > 1020) {
+        setMovieCards(8);
+        setMoreMovieCards(3);
+      } else if (width <= 1020 && width > 650) {
+        setMovieCards(8);
+        setMoreMovieCards(2);
+      } else if (width <= 650) {
+        setMovieCards(5);
+        setMoreMovieCards(1);
+      }
+    }
+    widthCheck();
+      }, []);
+
+   function getMoreMovies() {
+    setMovieCards(movieCards + moreMovieCards);
+  }
+
   return (
     <section className="moviescard-list">
-      <div className="moviescard-list__container">
+        <div className="moviescard-list__container">
         {movies.map((movie) => (
         <MoviesCard
-          key={movie._id}
+          key={movie.id || movie.movieId}
           movie={movie}
-          saved={false}
+          isLikedMovie={isLikedMovie}
+          handleMovie={handleMovie}
+          pathSavedMovie={pathSavedMovie}
         />
         ))
     }
       </div>
-    {isLoading ? <Preloader /> : (
-      buttonMore && (
-        <div className="more-movies-card more-movies-card_active">
-          <button className="movies__button btn" type="button" name="more" onClick={handlePreloader}>Ещё</button>
+      <div className={`more-movies-card ${
+              movies.length >= movieCards ? 'more-movies-card_active' : ''}`}>
+          <button className="movies__button btn" type="button" name="more" onClick={getMoreMovies}>Ещё</button>
         </div>
-        )
-      )}
       </section>
     )
 }
