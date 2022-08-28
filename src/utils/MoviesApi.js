@@ -1,18 +1,25 @@
-import { apiSettings, handleRequest } from './utils';
+import { apiSettings } from './utils';
 
 class Api {
-    constructor(options) {
-        this._url = options.MOVIES_URL;
-        this._headers = options.headers;
-        this._handleRequest = handleRequest;
+    constructor(MOVIES_URL, headers) {
+        this._moviesUrl = MOVIES_URL;
+        this._headers = headers;
     }
 
+    _checkErrors(res) {
+        if (res.ok) {
+            return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      };
+
     getMovies() {
-        return this._handleRequest('', {
+        return fetch(`${ this._moviesUrl}/beatfilm-movies`, {
             headers: {
                 ...this._headers,
             }
-        });
+        })
+        .then(this._checkErrors);
     }
 }
 

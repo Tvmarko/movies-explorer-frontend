@@ -1,40 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import SearchForm from "../SearchForm/SearchForm";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
-import Preloader from "../Preloader/Preloader";
 
 function SavedMovies(props) {
+  const [countMovies, setCountMovies] = useState(0);
   const {
-    findSavedMovies,
     savedMovies,
-    isLoading,
-      searchMovies,
-     deleteMovie,
+    searchMovies,
+    deleteMovie, 
+    searchShortMovies,
+    isShortMovie,
+    isSavedMovies,                 
     } = props;
 
-    function handleDelete(movie) {
-      const movieForDelete = savedMovies.forEach((item) => {
-          if (+item.movieId === movie.id)
-              deleteMovie(movieForDelete[0]);
-      });
-    }
-
   return (
-<>
-      <Header />
+    <>
+    <Header/>
     <main className="movies">
       <SearchForm searchMovies={searchMovies}/>
-      {isLoading ? <Preloader /> : (
-              findSavedMovies && (
       <MoviesCardList 
-      movies={savedMovies} 
-      handleMovie={handleDelete} 
+      movies={savedMovies}
+      isSavedMovies={isSavedMovies}
+      isShortMovie={isShortMovie}
+      searchShortMovies={searchShortMovies}
+      deleteMovie={deleteMovie} 
+      pathSavedMovie={true}
+      count={{ countMovies, setCountMovies }}
            />
-         )
-        )}
-        <div className="more-movies-card"></div>
+      <div className="more-movies-card"></div>
     </main>
     <Footer />
     </>

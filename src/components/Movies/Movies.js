@@ -1,38 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Movies.css";
 import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
-import Preloader from "../Preloader/Preloader";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+
 
 function Movies(props) {
+  const [countMovies, setCountMovies] = useState(0);
    const {
     movies,
-    findMovies,
-    isLoading,
+    savedMovies,
     searchMovies,
-    saveMovie,
+    addMovie,
+    isLikedMovie,
+    isShortMovie,
+    searchShortMovies,
   } = props;
-
 
   return (
     <>
-      <Header />
+      <Header/>
     <main className="movies">
       <SearchForm searchMovies={searchMovies}/>
-      {isLoading ? <Preloader /> : (
-              findMovies && (
       <MoviesCardList 
       movies={movies} 
-      handleMovie={{saveMovie}} 
+      isLikedMovie={isLikedMovie}
+      addMovie={addMovie} 
+      searchMovies={searchMovies}
+      isShortMovie={isShortMovie}
+      searchShortMovies={searchShortMovies}
+      savedMovies={savedMovies}
+      isSavedMovies={false}
+      count={{ countMovies, setCountMovies }}
       />
-         )
-      )}
-    </main>
-    <Footer />
-    </>
-  );
+     </main>   
+<Footer/>
+</>
+);
 }
 
 export default Movies; 

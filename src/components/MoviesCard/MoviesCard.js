@@ -1,7 +1,7 @@
 import React from "react";
 import "./MoviesCard.css";
 
-function MoviesCard({movie, handleMovie, isLikedMovie,pathSavedMovie }) {
+function MoviesCard({movie, deleteMovie, isLikedMovie, handleLikeClick, pathSavedMovie }) {
   function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
   }
@@ -20,11 +20,12 @@ function MoviesCard({movie, handleMovie, isLikedMovie,pathSavedMovie }) {
        <h2 className="movies__card-title">{movie.title}</h2>
         {
           pathSavedMovie ? 
-          <button className={isLikedMovie(movie) ? "movies__card-like-button movies__card-like-button_liked btn" : "movies__card-like-button btn"} type="button"></button>
+          <button className={`movies__card-like-button  ${isLikedMovie ? "movies__card-like-button_liked btn" : ""}`}
+          type="button" onClick={handleLikeClick}></button>
           : 
           <button 
           className="movies__card-like-button movies__card-like-button_saved btn"
-          onClick={handleMovie.handleDelete(movie)}
+          onClick={deleteMovie}
           type="button"></button>
         }
       </div>

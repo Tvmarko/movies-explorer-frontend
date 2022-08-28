@@ -104,6 +104,7 @@
     line-height: 17px;
     transition: opacity .2s linear;
     width: 100%;
+    cursor: pointer;
   }
   
   .form__button_login {

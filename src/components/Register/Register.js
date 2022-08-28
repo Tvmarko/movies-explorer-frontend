@@ -44,7 +44,7 @@ function Register({handleRegister}) {
           required
           onChange={handleChangeName}
           />
-        <p className="form__error">Что-то пошло не так...</p>
+        <p className="form__error"></p>
       </label>
 
       <label className="form__item">

@@ -1,15 +1,20 @@
-import { apiSettings, handleRequest } from './utils';
+import { apiSettings } from './utils';
 
 class Api {
-    constructor(options) {
-        this._url = options.BASE_URL;
-        this._moviesUrl = options.MOVIES_URL;
-        this._headers = options.headers;
-        this._handleRequest  = handleRequest ;
-    }
+    constructor({BASE_URL, MOVIES_URL, headers}) {
+        this._baseUrl = BASE_URL;
+        this._headers = headers;
+      }
+    
+    _checkErrors(res) {
+        if (res.ok) {
+            return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      };
 
-    login = (email, password) => {
-        return this._handleRequest ('signin', {
+    login (email, password) {
+        return fetch(`${this._baseUrl}/signin`, {
             method: 'POST',
             headers: {
                 ...this._headers,
@@ -19,10 +24,11 @@ class Api {
                 "password": password 
             }),
         })
+        .then(this._checkErrors);
     }
 
-    register = (name, email, password) => {
-        return this._handleRequest ('signup', {
+    register(name, email, password) {
+        return fetch(`${this._baseUrl}/signup`, {
             method: 'POST',
             headers: {
                 ...this._headers,
@@ -32,35 +38,31 @@ class Api {
                 "email": email,
                 "password": password
                 }),
-        });
+        })
+        .then(this._checkErrors);
     }
 
-    getUser () {
-        return this._handleRequest ('users/me', {
-            method: 'GET',
-            headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
-        });
-    }
-    
     editProfile(user) {
-        return this._handleRequest ('users/me', {
+        return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers},
-            body: JSON.stringify({ 
+            body: JSON.stringify({
               name: user.name,
-              email: user.email
-            }) 
-        });
-    }
+              about: user.about
+            })
+          })
+          .then(this._checkErrors);
+        }
 
     getMovies() {
-        return this._handleRequest ('movies', {
+        return fetch(`${this._baseUrl}/movies`, {
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
-        });
+        })
+        .then(this._checkErrors);
     }
 
     addMovie(movie) {
-        return this._handleRequest ('movies', {
+        return fetch(`${this._baseUrl}/movies`, {
             method: 'POST',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers},
             body: JSON.stringify({
@@ -69,21 +71,31 @@ class Api {
                 duration: movie.duration,
                 year: movie.year,
                 description: movie.description,
-                image: `${this._moviesUrl}${movie.image.url}`,
-                trailer: movie.trailerLink,
-                movieId: movie.id,
+                image: `https://api.nomoreparties.co${movie.image.url}`,
+                trailerLink: movie.trailerLink,
                 nameRU: movie.nameRU,
                 nameEN: movie.nameEN,
-                thumbnail: `${this._moviesUrl}${movie.image.formats.thumbnail.url}`,
+                thumbnail: `https://api.nomoreparties.co${movie.image.url}`,
+                movieId: movie.id,
             }),
-        });
+        })
+        .then(this._checkErrors);
     }
 
     deleteMovie(movieId) {
-        return this._handleRequest (`movies/${movieId}`, {
+        return fetch(`${this._baseUrl}/movies${movieId}`, {
             method: 'DELETE',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
-        });
+        })
+        .then(this._checkErrors);
+    }
+
+    checkToken(token) {
+        return fetch(`${this._baseUrl}/users/me`, {
+          method: 'GET',
+          headers: {authorization: `Bearer ${token}`, ...this._headers}          
+        })
+        .then(this._checkErrors);
     }
 }
 

@@ -52,7 +52,7 @@ function Login({handleLogin}) {
            name="password"
           value={password}
           placeholder="Пароль"
-          minLength="6"
+          minLength="8"
           maxLength="30"
           onChange={handlePasswordChange}
           required 
