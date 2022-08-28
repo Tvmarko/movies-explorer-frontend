@@ -12,26 +12,25 @@ function Movies(props) {
     movies,
     savedMovies,
     searchMovies,
-    addMovie,
+    handleMovie,
     isLikedMovie,
     isShortMovie,
     searchShortMovies,
+    deleteMovie,
   } = props;
 
   return (
     <>
       <Header/>
     <main className="movies">
-      <SearchForm searchMovies={searchMovies}/>
+      <SearchForm searchMovies={searchMovies} isShortMovie={isShortMovie} searchShortMovies={searchShortMovies}/>
       <MoviesCardList 
       movies={movies} 
       isLikedMovie={isLikedMovie}
-      addMovie={addMovie} 
-      searchMovies={searchMovies}
-      isShortMovie={isShortMovie}
-      searchShortMovies={searchShortMovies}
+      handleMovie={handleMovie} 
       savedMovies={savedMovies}
-      isSavedMovies={false}
+      pathSavedMovie={false}
+      deleteMovie={deleteMovie} 
       count={{ countMovies, setCountMovies }}
       />
      </main>   

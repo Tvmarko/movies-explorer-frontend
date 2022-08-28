@@ -164,7 +164,8 @@ function searchShortMovies() {
 }
 
 function isLikedMovie(movie) {
-  return savedMovies.some((item) => +item.movieId === movie.id);
+  const isSavedMovie = savedMovies.some((item) => item.movieId !== movie.movieId);
+  return isSavedMovie;
 }
 
 function editProfile(user) {
@@ -260,7 +261,7 @@ function handleLogin(email, password) {
             isLikedMovie={isLikedMovie}
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
-            addMovie={handleLikeChange}
+            handleMovie={handleLikeChange}
             searchMovies={handleSearchMovie}
             deleteMovie={handleDeleteMovie}
             component={Movies}>

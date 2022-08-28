@@ -6,10 +6,9 @@ import Preloader from "../Preloader/Preloader";
 function MoviesCardList(props) {
   const {
     movies,
-    addMovie,
-    pathSavedMovie = false,
+    handleMovie,
+    pathSavedMovie,
     isLikedMovie,
-    isSavedMovies,
     deleteMovie,
     count,
    } = props;
@@ -51,11 +50,9 @@ function MoviesCardList(props) {
         {movies.slice(0, count.countMovies).map((movie) => (
         <MoviesCard
           key={movie.id || movie.movieId}
-          movie={movie}
-          savedMovies={props.savedMovies}
-          isSavedMovies={isSavedMovies}
+          movie={movie}             
           isLikedMovie={isLikedMovie}
-          addMovie={addMovie}
+          handleMovie={handleMovie}
           pathSavedMovie={pathSavedMovie}
           deleteMovie={deleteMovie} 
           />

@@ -9,10 +9,7 @@ function SavedMovies(props) {
   const {
     savedMovies,
     searchMovies,
-    deleteMovie, 
-    searchShortMovies,
-    isShortMovie,
-    isSavedMovies,                 
+    deleteMovie,          
     } = props;
 
   return (
@@ -22,9 +19,6 @@ function SavedMovies(props) {
       <SearchForm searchMovies={searchMovies}/>
       <MoviesCardList 
       movies={savedMovies}
-      isSavedMovies={isSavedMovies}
-      isShortMovie={isShortMovie}
-      searchShortMovies={searchShortMovies}
       deleteMovie={deleteMovie} 
       pathSavedMovie={true}
       count={{ countMovies, setCountMovies }}
