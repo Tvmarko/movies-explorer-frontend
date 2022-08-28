@@ -91,7 +91,7 @@ class Api {
     }
 
     checkToken(token) {
-        return fetch(`${this._baseUrl}/users/me`, {
+        return fetch(`${this._baseUrl}`, {
           method: 'GET',
           headers: {authorization: `Bearer ${token}`, ...this._headers}          
         })
