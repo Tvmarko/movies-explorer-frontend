@@ -1,9 +1,9 @@
 import { apiSettings } from './utils';
 
 class Api {
-    constructor(MOVIES_URL, headers) {
-        this._moviesUrl = MOVIES_URL;
-        this._headers = headers;
+    constructor(settings) {
+        this._moviesUrl = settings.MOVIES_URL;
+        this._headers = settings.headers;
     }
 
     _checkErrors(res) {

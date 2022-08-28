@@ -95,7 +95,7 @@ function handleSearchMovie(movie) {
   }
   
   function handleSearchSavedMovie(movie) {
-    const savedMovieList = JSON.parse(localStorage.getItem('savedMovieList'));
+    const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
     const searchSavedMovies = savedMovieList.filter(
       (item) => {
         const nameEn = item.nameEn ? item.nameEn : item.nameRu;
@@ -115,9 +115,9 @@ function handleSearchMovie(movie) {
       }
   
   function handleLikeChange(movie) {
-    const isSavedMovie = savedMovies.some((i) => i.movieId === movie.movieId);
+    const isSavedMovie = savedMovies.some((item) => item.movieId === movie.movieId);
     if (isSavedMovie) {
-      const savedMovie = savedMovies.find((i) => i.movieId === movie.movieId);
+      const savedMovie = savedMovies.find((item) => item.movieId === movie.movieId);
       handleDislikeClick(savedMovie);
     }
     if (!isSavedMovie) {
@@ -129,12 +129,8 @@ function handleSearchMovie(movie) {
     mainApi
       .addMovie(movie)
       .then((newSavedMovie) => {
-        if (!newSavedMovie) {
-          throw new Error("При добавлении фильма произошла ошибка");
-        } else {
-          localStorage.setItem("savedMovieList", JSON.stringify(newSavedMovie));
+           localStorage.setItem("savedMovieList", JSON.stringify(newSavedMovie));
           setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
-        }
       })
       .catch((err) => {
         console.log(err);
