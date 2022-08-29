@@ -24,24 +24,22 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([]);
   const [isShortMovies, setIsShortMovies] = useState(false);
   const [message, setMessage] = useState("");
-     
+       
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      mainApi.checkToken()
+    checkToken();
+    history.push('/');
+    if(loggedIn) {
+      mainApi.getProfileInfo()
         .then(({ name, email, _id }) => {
-          setLoggedIn(true);
           setCurrentUser({ name, email, _id });
           history.push(location.pathname);
         })
         .catch((err) => {
-          localStorage.removeItem("jwt");
-          setLoggedIn(false);
-          history.push("/");
           console.log(err);
     });
   }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-}, []);
+}, [loggedIn, history]);
 
   useEffect(() => {
     if (loggedIn && location.pathname === "/movies") {
@@ -70,6 +68,29 @@ useEffect(() => {
               })
           }
 }, [loggedIn, location, currentUser]);
+
+useEffect(() => {
+  const token = localStorage.getItem('jwt');
+  if(token){
+    mainApi.checkToken(token)
+      .then((res) => {
+        if(res){
+          checkToken();
+          history.push("/movies");
+        }
+      })
+      .catch((err) => {
+        console.log(err); 
+      });
+  }
+}, [history]);
+
+function checkToken() {
+  const jwt = localStorage.getItem('jwt');
+  if (jwt) {
+    setLoggedIn(true);
+  }
+}
 
 function handleSearchMovie(movie) {
   const movieList = JSON.parse(localStorage.getItem('movieList'));
@@ -154,7 +175,11 @@ function isLikedMovie(movie) {
 function editProfile(name, email) {
   mainApi.editProfile(name, email)
   .then((userUpdatedData) => {
-    setCurrentUser(userUpdatedData);
+    setCurrentUser({
+      ...currentUser,
+      name: userUpdatedData.name,
+      about: userUpdatedData.about,
+    });
     setMessage("Данные профиля успешно обновлены");
   })
   .catch((err) => {
@@ -187,10 +212,12 @@ function handleRegister(name, email, password) {
 function handleLogin(email, password) {
   mainApi.login(email, password)
   .then((data) => {
-      setLoggedIn(true);
+    if(data.token) {
       localStorage.setItem("jwt", data.token);
+      checkToken();
       history.push("/movies");
-    })
+    }
+  })
   .catch((err) => {
     setMessage("При авторизации произошла ошибка");
     if (err === 401) {

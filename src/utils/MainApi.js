@@ -42,24 +42,24 @@ class Api {
         .then(this._checkErrors);
     }
 
-    editProfile(name, email) {
+    editProfile(user) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers},
             body: JSON.stringify({
-                name, 
-                email,
+                name: user.name, 
+                email: user.email,
             })
           })
           .then(this._checkErrors);
         }
 
-    getUserData() {
-        return fetch(`${this._baseUrl}${"users"}/${"me"}`, {
-            headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
-        })
-        .then(this._checkErrors);
-    }
+        getProfileInfo() {
+            return fetch(`${this._baseUrl}/users/me`, {
+              headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
+          })
+          .then(this._checkErrors);
+        } 
 
 
     getMovies() {
