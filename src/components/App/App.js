@@ -178,7 +178,7 @@ function editProfile(name, email) {
     setCurrentUser({
       ...currentUser,
       name: userUpdatedData.name,
-      about: userUpdatedData.about,
+      email: userUpdatedData.email,
     });
     setMessage("Данные профиля успешно обновлены");
   })
