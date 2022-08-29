@@ -118,8 +118,12 @@ function handleSearchMovie(movie) {
       }
     }
   
-  function handleLikeChange(movie) {
-    const isSavedMovie = savedMovies.some((item) => +item.movieId === movie.id);
+  function handleMovieLike(movie) {
+    const isSavedMovie = savedMovies.likes.some(user => user === currentUser._id);
+    mainApi.handleLikeMovieStatus(movie._id, !isSavedMovie)
+    .then((cardHandledLikes) => {
+      setMovies(movies.map((c) => c._id === movie._id ? cardHandledLikes : c));
+      })
     if (isSavedMovie) {
       const savedMovie = savedMovies.find((item) => +item.movieId === movie.id);
       handleDislikeClick(savedMovie);
@@ -132,12 +136,12 @@ function handleSearchMovie(movie) {
     function handleLikeClick(movie) {
     mainApi
       .addMovie(movie)
-      .then((newMovie) => {
-        if (!newMovie) {
+      .then((userAddedMovie) => {
+        if (!userAddedMovie) {
           throw new Error("При добавлении фильма произошла ошибка");
         } else {
-        localStorage.setItem("savedMovieList", JSON.stringify(newMovie = [newMovie.movie, ...savedMovies]));
-        setSavedMovies(newMovie);
+          localStorage.setItem("savedMovieList", JSON.stringify(userAddedMovie));
+          setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
         }
       })
       .catch((err) => {
@@ -168,7 +172,7 @@ function searchShortMovies() {
 }
 
 function isLikedMovie(movie) {
-  const isSavedMovie = savedMovies.some((item) => +item.movieId === movie.id);
+  const isSavedMovie = movie.likes.some(user => user === currentUser._id);
   return isSavedMovie;
 }
 
@@ -257,7 +261,7 @@ function handleLogin(email, password) {
             isLikedMovie={isLikedMovie}
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
-            handleMovie={handleLikeChange}
+            handleMovie={handleMovieLike}
             searchMovies={handleSearchMovie}
             deleteMovie={handleDeleteMovie}
             component={Movies}>

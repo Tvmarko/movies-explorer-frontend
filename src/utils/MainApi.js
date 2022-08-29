@@ -98,6 +98,14 @@ class Api {
         .then(this._checkErrors);
     }
 
+    handleLikeMovieStatus(movie, likeMovieStatus) {
+        return fetch(`${this._baseUrl}/cards/${movie}/likes`, {
+          method: (likeMovieStatus ? 'PUT': 'DELETE'),
+          headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
+        })
+        .then(this._checkErrors);
+      }
+
     checkToken(token) {
         return fetch(`${this._baseUrl}/users/me`, {
           method: 'GET',

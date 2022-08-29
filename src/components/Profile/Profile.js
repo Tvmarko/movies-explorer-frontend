@@ -72,10 +72,10 @@ function Profile({ onSignOut, editProfile }) {
   }
 
  return (
-    <section className="profile">
-      <form className="profile__form" onSubmit={handleProfileSubmit}>
+    <form className="profile" onSubmit={handleProfileSubmit}>
+      <div className="profile__form" >
         <h3 className="profile__username">{`Привет, ${currentUser.name}!`}</h3>
-        <div className="profile__form-fields">
+        <div className="profile__form-fields" onSubmit={handleProfileSubmit}>
           <div className="profile__input-container">
             <p className="profile__text">Имя</p>
             <input 
@@ -109,7 +109,7 @@ function Profile({ onSignOut, editProfile }) {
             <span className="profile__input-error">{emailError}</span>
           </div>
         </div>
-      </form>
+      </div>
         <button 
         className={`profile__button btn ${!formValid  ? "" : "profile__button_inactive btn"}`}
         type="submit"
@@ -118,7 +118,7 @@ function Profile({ onSignOut, editProfile }) {
         Редактировать
         </button>
         <Link to="/" className="profile__sign-out btn link" onClick={onSignOut} type="button">Выйти из аккаунта</Link>
-    </section>
+    </form>
   );
 };
 

@@ -1,12 +1,15 @@
 import React from "react";
 import "./MoviesCard.css";
+import { CurrentUserContext } from "../../context/CurrentUserContext";
 
 function MoviesCard({movie, deleteMovie, isLikedMovie, handleMovie, pathSavedMovie }) {
+  const currentUser = React.useContext(CurrentUserContext);
+  
+  const isLiked = pathSavedMovie && isLikedMovie(currentUser.movie);
+  
   function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
   }
-
-  const isLiked = !pathSavedMovie && isLikedMovie(movie);
 
   function handleSaveMovie() {
     handleMovie(movie);
@@ -34,7 +37,7 @@ function MoviesCard({movie, deleteMovie, isLikedMovie, handleMovie, pathSavedMov
        <button 
           className={`movies__card-like-button ${isLiked ? "movies__card-like-button_liked btn" : "btn"}`}
           type="button" 
-          onClick={() => handleSaveMovie(movie)}/>
+          onClick={handleSaveMovie}/>
          )}
         </div>
       <p className="movies__card-movie-time">{getMovieDuration(movie.duration)}</p>
