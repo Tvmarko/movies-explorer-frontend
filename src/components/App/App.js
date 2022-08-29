@@ -28,17 +28,16 @@ function App() {
   useEffect(() => {
     if (localStorage.getItem('jwt')) {
       mainApi.checkToken()
-        .then((res) => {
-          if (res) {
-                setLoggedIn(true);
-                setCurrentUser(res);
-                history.push(location.pathname);
-              }
-            })
-            .catch((err) => {
-              localStorage.removeItem("jwt");
-              history.push("/");
-              console.log(err);
+        .then(({ name, email, _id }) => {
+          setLoggedIn(true);
+          setCurrentUser({ name, email, _id });
+          history.push(location.pathname);
+        })
+        .catch((err) => {
+          localStorage.removeItem("jwt");
+          setLoggedIn(false);
+          history.push("/");
+          console.log(err);
     });
   }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,10 +60,10 @@ function App() {
 useEffect(() => {
   if (loggedIn && (location.pathname === "/saved-movies"|| location.pathname === "/movies")) {
           mainApi.getMovies()
-              .then((ownerMovies) => {
-                 const savedMoviesList = ownerMovies.filter(item => (item.owner === currentUser._id));
+              .then((res) => {
+                 const savedMoviesList =res.filter(item => (item.owner === currentUser._id));
                  localStorage.setItem("savedMovieList", JSON.stringify(savedMoviesList));
-                 setSavedMovies(savedMoviesList);
+                 setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
               })
               .catch((err) => {
                 console.log(err);
@@ -74,18 +73,9 @@ useEffect(() => {
 
 function handleSearchMovie(movie) {
   const movieList = JSON.parse(localStorage.getItem('movieList'));
-    if (movieList) {
-  const searchedMovies = movieList.filter(
-    (item) => {
-      const nameEn = item.nameEn ? item.nameEn : item.nameRu;
-      const movieNameEn = nameEn.toLowerCase();
-      const movieNameRu = item.nameRu.toLowerCase();
-      const movieDescription = item.description.toLowerCase();
-      const findMovieName = movie.movieName.toLowerCase();
-      const findMovies = movieNameRu.includes(findMovieName) || movieNameEn.includes(findMovieName) ||
-        movieDescription.includes(findMovieName);
-       return findMovies;
-    });
+  if (movieList) {
+    const searchedMovies = movieList.filter(
+      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 50 : ' '));
     if (searchedMovies.length) {
       setMovies(searchedMovies);
       } else {
@@ -96,28 +86,21 @@ function handleSearchMovie(movie) {
   
   function handleSearchSavedMovie(movie) {
     const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
+    if (savedMovieList) {
     const searchSavedMovies = savedMovieList.filter(
-      (item) => {
-        const nameEn = item.nameEn ? item.nameEn : item.nameRu;
-        const movieNameEn = nameEn.toLowerCase();
-        const movieNameRu = item.nameRu.toLowerCase();
-        const movieDescription = item.description.toLowerCase();
-        const findMovieName = movie.movieName.toLowerCase();
-        const findMovies = movieNameRu.includes(findMovieName) || movieNameEn.includes(findMovieName) ||
-          movieDescription.includes(findMovieName);
-        return findMovies;
-      });
+      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 50 : ' '));
       if (searchSavedMovies.length) {
         setSavedMovies(searchSavedMovies);
         } else {
         setSavedMovies([]);
         }
       }
+    }
   
   function handleLikeChange(movie) {
-    const isSavedMovie = savedMovies.some((item) => item.movieId === movie.movieId);
+    const isSavedMovie = savedMovies.some((item) => +item.movieId === movie.id);
     if (isSavedMovie) {
-      const savedMovie = savedMovies.find((item) => item.movieId === movie.movieId);
+      const savedMovie = savedMovies.find((item) => +item.movieId === movie.id);
       handleDislikeClick(savedMovie);
     }
     if (!isSavedMovie) {
@@ -128,9 +111,13 @@ function handleSearchMovie(movie) {
     function handleLikeClick(movie) {
     mainApi
       .addMovie(movie)
-      .then((newSavedMovie) => {
-           localStorage.setItem("savedMovieList", JSON.stringify(newSavedMovie));
-          setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
+      .then((newMovie) => {
+        if (!newMovie) {
+          throw new Error("При добавлении фильма произошла ошибка");
+        } else {
+        localStorage.setItem("savedMovieList", JSON.stringify(newMovie = [newMovie.movie, ...savedMovies]));
+        setSavedMovies(newMovie);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -143,8 +130,8 @@ function handleSearchMovie(movie) {
       .then(() => {
         const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
         const res = savedMovieList.filter((item) => item.movieId !== movie.movieId);
-        setSavedMovies(res);
         localStorage.setItem("savedMovieList", JSON.stringify(res));
+        setSavedMovies(res);
       })
       .catch((err) => {
         console.log(err);
@@ -160,19 +147,14 @@ function searchShortMovies() {
 }
 
 function isLikedMovie(movie) {
-  const isSavedMovie = savedMovies.some((item) => item.movieId !== movie.movieId);
+  const isSavedMovie = savedMovies.some((item) => +item.movieId === movie.id);
   return isSavedMovie;
 }
 
-function editProfile(user) {
-  mainApi.editProfile(user)
+function editProfile(name, email) {
+  mainApi.editProfile(name, email)
   .then((userUpdatedData) => {
-    setCurrentUser({
-      ...currentUser,
-      name: userUpdatedData.name,
-      email: userUpdatedData.email,
-      password: userUpdatedData.password,
-    });
+    setCurrentUser(userUpdatedData);
     setMessage("Данные профиля успешно обновлены");
   })
   .catch((err) => {
@@ -189,9 +171,7 @@ function handleRegister(name, email, password) {
  mainApi.register(name, email, password)
  .then((res) => {
     if (res) {
-      setMessage("");
       handleLogin(email, password);
-      setLoggedIn(true);
       setCurrentUser(res);
     }
 })
@@ -207,17 +187,10 @@ function handleRegister(name, email, password) {
 function handleLogin(email, password) {
   mainApi.login(email, password)
   .then((data) => {
-    if (!data) {
-      setMessage("Некорректные данные");
-      return false;
-    }
-    if (data.token) {
-      localStorage.setItem("jwt", data.token);
-      setMessage("");
       setLoggedIn(true);
+      localStorage.setItem("jwt", data.token);
       history.push("/movies");
-    }
-  })
+    })
   .catch((err) => {
     setMessage("При авторизации произошла ошибка");
     if (err === 401) {
@@ -245,8 +218,8 @@ function handleLogin(email, password) {
       <div className="page">
       <Switch>
         <Route exact path="/">
-          <Header/>
-          <Main/>
+          <Header loggedIn={loggedIn}/>
+          <Main loggedIn={loggedIn}/>
           <Footer/>
         </Route>
         <ProtectedRoute 
@@ -285,7 +258,7 @@ function handleLogin(email, password) {
         </Route>
         <ProtectedRoute path="/profile"
          loggedIn={loggedIn}
-          onSignOut={handleSignOut}
+         onSignOut={handleSignOut}
          editProfile={editProfile}
          message={message}
          component={Profile}>

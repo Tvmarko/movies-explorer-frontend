@@ -1,20 +1,22 @@
 import React from "react";
 import "./MoviesCard.css";
 
-function MoviesCard({movie, deleteMovie, isLikedMovie, handleLikeClick, pathSavedMovie }) {
+function MoviesCard({movie, deleteMovie, isLikedMovie, handleMovie, pathSavedMovie }) {
   function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
   }
 
-  const isLikeStatus = pathSavedMovie ? true : isLikedMovie(movie);
+  const isLiked = !pathSavedMovie && isLikedMovie(movie);
 
-  const buttonClassName = !pathSavedMovie
-  ? isLikeStatus
-    ? "movies__card-like-button_liked btn"
-    : "btn"
-  : "movies__card-like-button_saved btn";
+  function handleSaveMovie() {
+    handleMovie(movie);
+  }
 
-   return (
+  function handleDeleteMovie() {
+    deleteMovie(movie);
+  }
+
+  return (
     <li className="movies__card">
       <a
       href={movie.trailerLink}
@@ -26,14 +28,14 @@ function MoviesCard({movie, deleteMovie, isLikedMovie, handleLikeClick, pathSave
       </a>
        <div className="movies__card-container">
        <h2 className="movies__card-title">{movie.nameRU}</h2>
+       {pathSavedMovie ? (
+         <button className="movies__card-like-button movies__card-like-button_saved btn" onClick={handleDeleteMovie} />
+         ) : (
        <button 
-       className={`movies__card-like-button ${buttonClassName}`}
+          className={`movies__card-like-button ${isLiked ? "movies__card-like-button_liked btn" : "btn"}`}
           type="button" 
-          onClick={
-            pathSavedMovie ? deleteMovie : handleLikeClick
-          }
-          >
-          </button>
+          onClick={() => handleSaveMovie(movie)}/>
+         )}
         </div>
       <p className="movies__card-movie-time">{getMovieDuration(movie.duration)}</p>
     </li>

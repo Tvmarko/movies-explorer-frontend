@@ -19,7 +19,6 @@ function SearchForm(props) {
     searchMovies(findedMovie);
     setFindedMovie("");
   }
-
     
   return (
     <section className="search" >
