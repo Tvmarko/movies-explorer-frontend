@@ -7,11 +7,11 @@ function Profile({ onSignOut, editProfile }) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const [changedName, setChangedName] = useState(false);
   const [changedEmail, setChangedEmail] = useState(false);
-  const [nameError, setNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
   const [isInputInactive, setIsInputInactive] = useState(true);
   
   useEffect(() => {
@@ -20,7 +20,7 @@ function Profile({ onSignOut, editProfile }) {
   }, [currentUser]);
 
   useEffect(() => {
-    if (nameError || emailError) {
+    if (nameError || emailError ) {
       setFormValid(false);
     } else {
       setFormValid(true);
@@ -67,7 +67,7 @@ function Profile({ onSignOut, editProfile }) {
 
   function handleProfileSubmit(evt) {
     evt.preventDefault();
-    editProfile(name,email);
+    editProfile({name, email});
     handleRedactClick();
   }
 
@@ -86,8 +86,8 @@ function Profile({ onSignOut, editProfile }) {
             type="text" 
             name="name"
             id="name"
-            minLength="1" 
-            maxLength="20" 
+            minLength="2" 
+            maxLength="30" 
             required 
             disabled={!isInputInactive}/>
             <span className=".profile__input-error profile_span">{nameError}</span>
@@ -102,7 +102,7 @@ function Profile({ onSignOut, editProfile }) {
             type="email" 
             name="email"
             id="email" 
-            minLength="1" 
+            minLength="4" 
             maxLength="30" 
             required 
             disabled={!isInputInactive}/>
@@ -111,7 +111,7 @@ function Profile({ onSignOut, editProfile }) {
         </div>
       </form>
         <button 
-        className={`profile__button btn link ${!formValid  ? "" : "profile__button_inactive btn link"}`}
+        className={`profile__button btn ${!formValid  ? "" : "profile__button_inactive btn"}`}
         type="submit"
         disabled={!formValid}
         onClick={handleRedactClick}>

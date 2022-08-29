@@ -172,8 +172,8 @@ function isLikedMovie(movie) {
   return isSavedMovie;
 }
 
-function editProfile(name, email) {
-  mainApi.editProfile(name, email)
+function editProfile(user) {
+  mainApi.editProfile(user)
   .then((userUpdatedData) => {
     setCurrentUser({
       ...currentUser,
