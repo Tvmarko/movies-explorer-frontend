@@ -122,13 +122,9 @@ function handleSearchMovie(movie) {
     mainApi
       .addMovie(movie)
       .then((userAddedMovie) => {
-        if (!userAddedMovie) {
-          throw new Error("При добавлении фильма произошла ошибка");
-        } else {
           localStorage.setItem("savedMovieList", JSON.stringify(userAddedMovie));
           setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
-        }
-      })
+        })
       .catch((err) => {
         console.log(err);
       });
