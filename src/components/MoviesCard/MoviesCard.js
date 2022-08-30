@@ -2,20 +2,22 @@ import React from "react";
 import "./MoviesCard.css";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 
-function MoviesCard({movie, deleteMovie, isLikedMovie, handleMovie, pathSavedMovie }) {
+function MoviesCard({movie, deleteMovie, likeMovie, saveMovie, isLikedMovie, pathSavedMovie }) {
   const currentUser = React.useContext(CurrentUserContext);
   
   const isLiked = pathSavedMovie && isLikedMovie(currentUser.movie);
-  
-  function getMovieDuration(mins) {
+  const likeButtonClassName = `movies__card-like-butto btn ${isLiked ? "movies__card-like-button_liked": ""}`;
+
+function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
   }
 
-  function handleSaveMovie() {
-    handleMovie(movie);
+  function handleLikeClick() {
+    likeMovie(movie);
+    saveMovie(movie);
   }
 
-  function handleDeleteMovie() {
+  function handleDeleteClick() {
     deleteMovie(movie);
   }
 
@@ -31,13 +33,13 @@ function MoviesCard({movie, deleteMovie, isLikedMovie, handleMovie, pathSavedMov
       </a>
        <div className="movies__card-container">
        <h2 className="movies__card-title">{movie.nameRU}</h2>
-       {pathSavedMovie ? (
-         <button className="movies__card-like-button movies__card-like-button_saved btn" onClick={handleDeleteMovie} />
+        {pathSavedMovie ? (
+         <button className="movies__card-like-button movies__card-like-button_saved btn" onClick={handleDeleteClick} />
          ) : (
        <button 
-          className={`movies__card-like-button ${isLiked ? "movies__card-like-button_liked btn" : "btn"}`}
+          className={likeButtonClassName}
           type="button" 
-          onClick={handleSaveMovie}/>
+          onClick={handleLikeClick}/>
          )}
         </div>
       <p className="movies__card-movie-time">{getMovieDuration(movie.duration)}</p>

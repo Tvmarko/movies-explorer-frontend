@@ -118,22 +118,18 @@ function handleSearchMovie(movie) {
       }
     }
   
-  function handleMovieLike(movie) {
+  function handleLikeMovie(movie) {
     const isSavedMovie = savedMovies.likes.some(user => user === currentUser._id);
     mainApi.handleLikeMovieStatus(movie._id, !isSavedMovie)
     .then((cardHandledLikes) => {
-      setMovies(movies.map((c) => c._id === movie._id ? cardHandledLikes : c));
+      setMovies(movies.map((item) => item.movieId === movie.movieId ? cardHandledLikes : item));
       })
-    if (isSavedMovie) {
-      const savedMovie = savedMovies.find((item) => +item.movieId === movie.id);
-      handleDislikeClick(savedMovie);
-    }
-    if (!isSavedMovie) {
-      handleLikeClick(movie);
-    }
+      .catch((err) => {
+        console.log(err); 
+      });
   }
 
-    function handleLikeClick(movie) {
+    function handleSaveMovie(movie) {
     mainApi
       .addMovie(movie)
       .then((userAddedMovie) => {
@@ -149,7 +145,7 @@ function handleSearchMovie(movie) {
       });
   }
 
-	function handleDislikeClick(movie) {
+	function handleDeleteMovie(movie) {
 		mainApi
       .deleteMovie(movie.movieId)
       .then(() => {
@@ -161,10 +157,6 @@ function handleSearchMovie(movie) {
       .catch((err) => {
         console.log(err);
       });
-}
-
-function handleDeleteMovie(movie) {
-  handleDislikeClick(movie);
 }
 
 function searchShortMovies() {
@@ -261,7 +253,8 @@ function handleLogin(email, password) {
             isLikedMovie={isLikedMovie}
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
-            handleMovie={handleMovieLike}
+            saveMovie={handleSaveMovie}
+            likeMovie={handleLikeMovie}
             searchMovies={handleSearchMovie}
             deleteMovie={handleDeleteMovie}
             component={Movies}>
@@ -274,7 +267,6 @@ function handleLogin(email, password) {
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
             deleteMovie={handleDeleteMovie}
-            isSavedMovies={true}
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">
