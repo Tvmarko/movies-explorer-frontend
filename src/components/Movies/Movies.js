@@ -12,7 +12,8 @@ function Movies(props) {
     movies,
     savedMovies,
     searchMovies,
-    handleMovie,
+    saveMovie,
+    likeMovie,
     isLikedMovie,
     isShortMovie,
     searchShortMovies,
@@ -27,7 +28,8 @@ function Movies(props) {
       <MoviesCardList 
       movies={movies} 
       isLikedMovie={isLikedMovie}
-      handleMovie={handleMovie} 
+      saveMovie={saveMovie} 
+      likeMovie={likeMovie}
       savedMovies={savedMovies}
       pathSavedMovie={false}
       deleteMovie={deleteMovie} 

@@ -119,8 +119,8 @@ function handleSearchMovie(movie) {
     }
   
   function handleLikeMovie(movie) {
-    const isSavedMovie = savedMovies.likes.some(user => user === currentUser._id);
-    mainApi.handleLikeMovieStatus(movie._id, !isSavedMovie)
+    const isSavedMovie = savedMovies.find(user => user === currentUser._id);
+    mainApi.handleLikeMovieStatus(movie.movieId, !isSavedMovie)
     .then((cardHandledLikes) => {
       setMovies(movies.map((item) => item.movieId === movie.movieId ? cardHandledLikes : item));
       })

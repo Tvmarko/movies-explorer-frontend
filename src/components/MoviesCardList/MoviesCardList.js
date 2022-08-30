@@ -6,7 +6,8 @@ import Preloader from "../Preloader/Preloader";
 function MoviesCardList(props) {
   const {
     movies,
-    handleMovie,
+    saveMovie,
+    likeMovie,
     pathSavedMovie,
     isLikedMovie,
     deleteMovie,
@@ -52,7 +53,8 @@ function MoviesCardList(props) {
           key={movie.id || movie.movieId}
           movie={movie}             
           isLikedMovie={isLikedMovie}
-          handleMovie={handleMovie}
+          saveMovie={saveMovie} 
+          likeMovie={likeMovie}
           pathSavedMovie={pathSavedMovie}
           deleteMovie={deleteMovie} 
           />
