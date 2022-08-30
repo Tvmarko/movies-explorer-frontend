@@ -7,10 +7,16 @@ import Footer from '../Footer/Footer';
 function SavedMovies(props) {
   const [countMovies, setCountMovies] = useState(0);
   const {
+    movies,
     savedMovies,
     searchMovies,
     deleteMovie,          
     } = props;
+
+    function deleteSavedMovie(movie) {
+      if (movies.some((item) => item.id === +movie.movieId))
+          deleteMovie(movie);
+  }
 
   return (
     <>
@@ -19,7 +25,7 @@ function SavedMovies(props) {
       <SearchForm searchMovies={searchMovies}/>
       <MoviesCardList 
       movies={savedMovies}
-      deleteMovie={deleteMovie} 
+      deleteSavedMovie={deleteSavedMovie} 
       pathSavedMovie={true}
       count={{ countMovies, setCountMovies }}
            />
