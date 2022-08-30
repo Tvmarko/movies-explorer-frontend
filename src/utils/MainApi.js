@@ -99,7 +99,7 @@ class Api {
     }
 
     handleLikeMovieStatus(movie, likeMovieStatus) {
-        return fetch(`${this._baseUrl}/cards/${movie}/likes`, {
+        return fetch(`${this._baseUrl}/movies/${movie}/likes`, {
           method: (likeMovieStatus ? 'PUT': 'DELETE'),
           headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
         })
