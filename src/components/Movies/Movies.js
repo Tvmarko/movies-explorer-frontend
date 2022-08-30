@@ -13,12 +13,18 @@ function Movies(props) {
     savedMovies,
     searchMovies,
     saveMovie,
-    likeMovie,
     isLikedMovie,
     isShortMovie,
     searchShortMovies,
     deleteMovie,
   } = props;
+
+  const deleteSavedMovie = function(movie) {
+    savedMovies.forEach((item) => {
+        if (+item.movieId === movie.id)
+        deleteMovie(item);
+    });
+}
 
   return (
     <>
@@ -29,10 +35,9 @@ function Movies(props) {
       movies={movies} 
       isLikedMovie={isLikedMovie}
       saveMovie={saveMovie} 
-      likeMovie={likeMovie}
       savedMovies={savedMovies}
       pathSavedMovie={false}
-      deleteMovie={deleteMovie} 
+      deleteSavedMovie={deleteSavedMovie} 
       count={{ countMovies, setCountMovies }}
       />
      </main>   

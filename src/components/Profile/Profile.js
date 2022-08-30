@@ -102,7 +102,7 @@ function Profile({ onSignOut, editProfile }) {
             type="email" 
             name="email"
             id="email" 
-            minLength="4" 
+            minLength="2" 
             maxLength="30" 
             required 
             disabled={!isInputInactive}/>

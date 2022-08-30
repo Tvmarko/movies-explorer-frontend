@@ -7,8 +7,7 @@ function MoviesCardList(props) {
   const {
     movies,
     saveMovie,
-    likeMovie,
-    pathSavedMovie,
+    pathSavedMovie = false,
     isLikedMovie,
     deleteMovie,
     count,
@@ -54,7 +53,6 @@ function MoviesCardList(props) {
           movie={movie}             
           isLikedMovie={isLikedMovie}
           saveMovie={saveMovie} 
-          likeMovie={likeMovie}
           pathSavedMovie={pathSavedMovie}
           deleteMovie={deleteMovie} 
           />

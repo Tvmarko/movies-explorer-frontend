@@ -118,19 +118,7 @@ function handleSearchMovie(movie) {
       }
     }
   
-  function handleLikeMovie(movie) {
-    const movieList = JSON.parse(localStorage.getItem("movieList"));
-    const isSavedMovie = movieList.some((item) => +item.movieId === movie.id);
-    mainApi.handleLikeMovieStatus(movie.movieId, !isSavedMovie)
-    .then((cardHandledLikes) => {
-      setMovies(movieList.map((item) => item.movieId === movie.movieId ? cardHandledLikes : item));
-      })
-      .catch((err) => {
-        console.log(err); 
-      });
-  }
-
-    function handleSaveMovie(movie) {
+  function handleSaveMovie(movie) {
     mainApi
       .addMovie(movie)
       .then((userAddedMovie) => {
@@ -165,8 +153,7 @@ function searchShortMovies() {
 }
 
 function isLikedMovie(movie) {
-  const isSavedMovie = movie.likes.some(user => user === currentUser._id);
-  return isSavedMovie;
+  return savedMovies.some((item) => +item.movieId === movie.id);
 }
 
 function editProfile(user) {
@@ -255,7 +242,6 @@ function handleLogin(email, password) {
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
             saveMovie={handleSaveMovie}
-            likeMovie={handleLikeMovie}
             searchMovies={handleSearchMovie}
             deleteMovie={handleDeleteMovie}
             component={Movies}>
@@ -266,6 +252,7 @@ function handleLogin(email, password) {
             savedMovies={savedMovies}
             searchMovies={handleSearchSavedMovie}
             isShortMovie={isShortMovies}
+            isLikedMovie={isLikedMovie}
             searchShortMovies ={searchShortMovies}
             deleteMovie={handleDeleteMovie}
             component={SavedMovies}>
