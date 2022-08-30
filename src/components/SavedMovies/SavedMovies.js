@@ -10,7 +10,7 @@ function SavedMovies(props) {
     movies,
     savedMovies,
     searchMovies,
-    deleteMovie,          
+    deleteMovie, 
     } = props;
 
     function deleteSavedMovie(movie) {
@@ -25,7 +25,7 @@ function SavedMovies(props) {
       <SearchForm searchMovies={searchMovies}/>
       <MoviesCardList 
       movies={savedMovies}
-      deleteSavedMovie={deleteSavedMovie} 
+      deleteSavedMovie={deleteSavedMovie}
       pathSavedMovie={true}
       count={{ countMovies, setCountMovies }}
            />

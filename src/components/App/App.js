@@ -141,7 +141,6 @@ function handleSearchMovie(movie) {
         const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
         const res = savedMovieList.filter((item) => item.movieId !== movie.movieId);
         localStorage.setItem("savedMovieList", JSON.stringify(res));
-        setSavedMovies(res);
       })
       .catch((err) => {
         console.log(err);

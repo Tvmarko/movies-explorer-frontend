@@ -91,7 +91,7 @@ class Api {
     }
 
     deleteMovie(movieId) {
-        return fetch(`${this._baseUrl}/movies${movieId}`, {
+        return fetch(`${this._baseUrl}/movies/${movieId}`, {
             method: 'DELETE',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
         })

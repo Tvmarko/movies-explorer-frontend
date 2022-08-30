@@ -36,7 +36,6 @@ function Movies(props) {
       isLikedMovie={isLikedMovie}
       saveMovie={saveMovie} 
       savedMovies={savedMovies}
-      pathSavedMovie={false}
       deleteSavedMovie={deleteSavedMovie} 
       count={{ countMovies, setCountMovies }}
       />
