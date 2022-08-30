@@ -6,7 +6,7 @@ function MoviesCard({movie, deleteMovie, likeMovie, saveMovie, isLikedMovie, pat
   const currentUser = React.useContext(CurrentUserContext);
   
   const isLiked = pathSavedMovie && isLikedMovie(currentUser.movie);
-  const likeButtonClassName = `movies__card-like-butto btn ${isLiked ? "movies__card-like-button_liked": ""}`;
+  const likeButtonClassName = `movies__card-like-button btn ${isLiked ? "movies__card-like-button_liked": ""}`;
 
 function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
