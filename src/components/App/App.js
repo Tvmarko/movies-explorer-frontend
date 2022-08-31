@@ -23,8 +23,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isShortMovies, setIsShortMovies] = useState(false);
-  const [message, setMessage] = useState("");
-       
+        
   useEffect(() => {
     checkToken();
     history.push('/');
@@ -49,7 +48,7 @@ function App() {
           localStorage.setItem("movieList", JSON.stringify(allMovies));
         })
         .catch((err) => {
-          console.log(err);
+          console.log(`Ошибка при загрузке списка фильмов: ${err}`)
       })
     }
   }, [loggedIn, location]);
@@ -64,7 +63,7 @@ useEffect(() => {
                  setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
               })
               .catch((err) => {
-                console.log(err);
+                console.log(`Ошибка при загрузке списка фильмов: ${err}`)
               })
           }
 }, [loggedIn, location, currentUser]);
@@ -126,7 +125,7 @@ function handleSearchMovie(movie) {
           setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
         })
       .catch((err) => {
-        console.log(err);
+        console.log(`Ошибка при сохранения фильма: ${err}`);
       });
   }
 
@@ -134,12 +133,12 @@ function handleSearchMovie(movie) {
 		mainApi
       .deleteMovie(movie.movieId)
       .then(() => {
-        const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
-        const res = savedMovieList.filter((item) => item.movieId !== movie.movieId);
+        const res = savedMovies.filter((item) => item.movieId !== movie.movieId);
         localStorage.setItem("savedMovieList", JSON.stringify(res));
+        setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
       })
       .catch((err) => {
-        console.log(err);
+        console.log(`Ошибка при удаления сохранённого фильма из списка: ${err}`);
       });
 }
 
@@ -159,16 +158,10 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
-    setMessage("Данные профиля успешно обновлены");
   })
   .catch((err) => {
-    console.log(err);
-    if (err.status === 409) {
-      setMessage("Пользователь с таким email уже существует");
-    } else {
-      setMessage("При изменении данных профиля произошла ошибка");
-    }
-  });
+    console.log(`Ошибка при выходе из аккаунта: ${err}`);
+   });
 }
 
 function handleRegister(name, email, password) {
@@ -180,11 +173,7 @@ function handleRegister(name, email, password) {
     }
 })
   .catch((err) => {
-    if (err === 409) {
-      setMessage("Пользователь с таким email уже существует");
-    } else {
-      setMessage("При регистрации пользователя произошла ошибка");
-    }
+    console.log(`Ошибка при регистрации: ${err}`);
   });
 }
 
@@ -198,13 +187,7 @@ function handleLogin(email, password) {
     }
   })
   .catch((err) => {
-    setMessage("При авторизации произошла ошибка");
-    if (err === 401) {
-      setMessage("Пользователь с таким email не найден");
-    }
-    if (err === 400) {
-      setMessage("Неверный email или пароль");
-    }
+    console.log(`Ошибка при авторизации: ${err}`);
     localStorage.removeItem("jwt");
   });
   }
@@ -254,19 +237,18 @@ function handleLogin(email, password) {
         </ProtectedRoute>
          <Route path="/signup">
           <Register 
-           handleRegister={handleRegister} message={message}
+           handleRegister={handleRegister} 
         />
         </Route>
         <Route path="/signin">
           <Login 
-            handleLogin={handleLogin} message={message}
+            handleLogin={handleLogin} 
         />
         </Route>
         <ProtectedRoute path="/profile"
          loggedIn={loggedIn}
          onSignOut={handleSignOut}
          editProfile={editProfile}
-         message={message}
          component={Profile}>
         </ProtectedRoute>
         <Route path="*">

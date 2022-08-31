@@ -1,23 +1,28 @@
 import React from "react";
 import "./MoviesCard.css";
 
-function MoviesCard({movie, deleteSavedMovie, saveMovie, isLikedMovie, pathSavedMovie }) {
-  const isLiked = !pathSavedMovie && isLikedMovie(movie);
+function MoviesCard({movie, savedMovies, deleteMovie, saveMovie, isLikedMovie, pathSavedMovie }) {
+  const isLiked =  movie.id && isLikedMovie(movie);
   const likeButtonClassName = `movies__card-like-button btn ${isLiked ? "movies__card-like-button_liked": ""}`;
   
   function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
   }
 
+  function handleDeleteClick() {
+    deleteMovie(movie);
+  }
+ 
   function handleSaveMovie() {
     if (isLiked) {
-      deleteSavedMovie(movie);
-    } else {
+      const savedMovie = savedMovies.find((item) => +item.movieId === movie.id);
+      deleteMovie(savedMovie);
+    } else if (!isLiked) {
       saveMovie(movie);
     }
   }
 
-    return (
+      return (
     <li className="movies__card">
       <a
       href={movie.trailerLink}
@@ -30,7 +35,7 @@ function MoviesCard({movie, deleteSavedMovie, saveMovie, isLikedMovie, pathSaved
        <div className="movies__card-container">
        <h2 className="movies__card-title">{movie.nameRU}</h2>
        {pathSavedMovie ? (
-      <button className="movies__card-like-button movies__card-like-button_saved btn" onClick={deleteSavedMovie} />
+      <button className="movies__card-like-button movies__card-like-button_saved btn" onClick={handleDeleteClick} />
       ) : (
     <button 
        className={likeButtonClassName}

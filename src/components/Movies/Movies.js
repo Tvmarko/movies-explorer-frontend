@@ -19,13 +19,6 @@ function Movies(props) {
     deleteMovie,
   } = props;
 
-  const deleteSavedMovie = function(movie) {
-    savedMovies.forEach((item) => {
-        if (+item.movieId === movie.id)
-        deleteMovie(item);
-    });
-}
-
   return (
     <>
       <Header/>
@@ -36,7 +29,7 @@ function Movies(props) {
       isLikedMovie={isLikedMovie}
       saveMovie={saveMovie} 
       savedMovies={savedMovies}
-      deleteSavedMovie={deleteSavedMovie} 
+      deleteMovie={deleteMovie} 
       count={{ countMovies, setCountMovies }}
       />
      </main>   
