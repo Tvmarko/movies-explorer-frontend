@@ -6,10 +6,11 @@ import Preloader from "../Preloader/Preloader";
 function MoviesCardList(props) {
   const {
     movies,
+    savedMovies,
     saveMovie,
     pathSavedMovie = false,
-    isLikedMovie,
     deleteMovie,
+    deleteSavedMovie,
     count,
    } = props;
 
@@ -42,8 +43,14 @@ function MoviesCardList(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-      
-  return (
+    const isLikedMovie = (movie) => {
+      const isLiked =  savedMovies.find((item) => {
+      return item.movieId === movie.id;
+    });
+      return Boolean(isLiked);
+    }
+    
+    return (
     <section className="moviescard-list">
       <div className="moviescard-list__container">
       <Suspense fallback={<Preloader />}>
@@ -55,6 +62,7 @@ function MoviesCardList(props) {
           saveMovie={saveMovie} 
           pathSavedMovie={pathSavedMovie}
           deleteMovie={deleteMovie} 
+          deleteSavedMovie={deleteSavedMovie}
           />
         ))
       }

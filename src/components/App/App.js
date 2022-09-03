@@ -44,11 +44,10 @@ function App() {
     if (loggedIn && location.pathname === "/movies") {
         moviesApi.getMovies()
         .then((allMovies) => {
-          setMovies(allMovies);
           localStorage.setItem("movieList", JSON.stringify(allMovies));
         })
         .catch((err) => {
-          console.log(`Ошибка при загрузке списка фильмов: ${err}`)
+          console.log(`Ошибка при загрузке фильмов: ${err}`)
       })
     }
   }, [loggedIn, location]);
@@ -58,12 +57,12 @@ useEffect(() => {
   if (loggedIn && (location.pathname === "/saved-movies"|| location.pathname === "/movies")) {
           mainApi.getMovies()
               .then((res) => {
-                 const savedMoviesList =res.filter(item => (item.owner === currentUser._id));
+                 const savedMoviesList = res.filter(item => (item.owner === currentUser._id));
                  localStorage.setItem("savedMovieList", JSON.stringify(savedMoviesList));
                  setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
               })
               .catch((err) => {
-                console.log(`Ошибка при загрузке списка фильмов: ${err}`)
+                console.log(`Ошибка при загрузке фильмов: ${err}`)
               })
           }
 }, [loggedIn, location, currentUser]);
@@ -95,7 +94,7 @@ function handleSearchMovie(movie) {
   const movieList = JSON.parse(localStorage.getItem('movieList'));
   if (movieList) {
     const searchedMovies = movieList.filter(
-      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 50 : ' '));
+      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
     if (searchedMovies.length) {
       setMovies(searchedMovies);
       } else {
@@ -108,7 +107,7 @@ function handleSearchMovie(movie) {
     const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
     if (savedMovieList) {
     const searchSavedMovies = savedMovieList.filter(
-      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 50 : ' '));
+      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
       if (searchSavedMovies.length) {
         setSavedMovies(searchSavedMovies);
         } else {
@@ -125,7 +124,7 @@ function handleSearchMovie(movie) {
           setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
         })
       .catch((err) => {
-        console.log(`Ошибка при сохранения фильма: ${err}`);
+        console.log(`Ошибка при сохранении фильма: ${err}`);
       });
   }
 
@@ -138,16 +137,17 @@ function handleSearchMovie(movie) {
         setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
       })
       .catch((err) => {
-        console.log(`Ошибка при удаления сохранённого фильма из списка: ${err}`);
+        console.log(`Ошибка при удалении фильма: ${err}`);
       });
+}
+
+function handleMovieForDelete(movie) {
+  const movieForDelete = savedMovies.filter((item) => +item.movieId === movie.id);
+  handleDeleteMovie(movieForDelete[0]);
 }
 
 function searchShortMovies() {
   setIsShortMovies(!isShortMovies);
-}
-
-function isLikedMovie(movie) {
-  return savedMovies.some((item) => +item.movieId === movie.id);
 }
 
 function editProfile(user) {
@@ -160,7 +160,7 @@ function editProfile(user) {
     });
   })
   .catch((err) => {
-    console.log(`Ошибка при выходе из аккаунта: ${err}`);
+    console.log(`Ошибка: ${err}`);
    });
 }
 
@@ -216,12 +216,11 @@ function handleLogin(email, password) {
             loggedIn={loggedIn}
             movies={movies}
             savedMovies={savedMovies}
-            isLikedMovie={isLikedMovie}
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
             saveMovie={handleSaveMovie}
             searchMovies={handleSearchMovie}
-            deleteMovie={handleDeleteMovie}
+            deleteMovie={handleMovieForDelete}
             component={Movies}>
         </ProtectedRoute>
         <ProtectedRoute path="/saved-movies"
@@ -230,9 +229,8 @@ function handleLogin(email, password) {
             savedMovies={savedMovies}
             searchMovies={handleSearchSavedMovie}
             isShortMovie={isShortMovies}
-            isLikedMovie={isLikedMovie}
             searchShortMovies ={searchShortMovies}
-            deleteMovie={handleDeleteMovie}
+            deleteSavedMovie={handleDeleteMovie}
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">

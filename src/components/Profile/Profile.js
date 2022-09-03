@@ -111,7 +111,7 @@ function Profile({ onSignOut, editProfile }) {
         </div>
       </div>
         <button 
-        className={`profile__button btn ${!formValid  ? "" : "profile__button_inactive btn"}`}
+        className={`profile__button btn ${!formValid  ? "profile__button_inactive btn" : ""}`}
         type="submit"
         disabled={!formValid}
         onClick={handleRedactClick}>

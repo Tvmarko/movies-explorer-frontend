@@ -13,7 +13,6 @@ function Movies(props) {
     savedMovies,
     searchMovies,
     saveMovie,
-    isLikedMovie,
     isShortMovie,
     searchShortMovies,
     deleteMovie,
@@ -26,7 +25,6 @@ function Movies(props) {
       <SearchForm searchMovies={searchMovies} isShortMovie={isShortMovie} searchShortMovies={searchShortMovies}/>
       <MoviesCardList 
       movies={movies} 
-      isLikedMovie={isLikedMovie}
       saveMovie={saveMovie} 
       savedMovies={savedMovies}
       deleteMovie={deleteMovie} 

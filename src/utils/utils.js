@@ -1,5 +1,5 @@
 export const apiSettings = {
-    BASE_URL: "http://localhost:3001",
+    BASE_URL:  `${window.location.protocol}${process.env.REACT_APP_API_URL || '//localhost:3001'}`,
     MOVIES_URL: "https://api.nomoreparties.co/beatfilm-movies",
     headers: {
       'Accept': 'application/json',

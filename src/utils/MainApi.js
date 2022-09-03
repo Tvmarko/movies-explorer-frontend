@@ -54,9 +54,9 @@ class Api {
           .then(this._checkErrors);
         }
 
-        getProfileInfo() {
-            return fetch(`${this._baseUrl}/users/me`, {
-              headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
+    getProfileInfo() {
+        return fetch(`${this._baseUrl}/users/me`, {
+            headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers}
           })
           .then(this._checkErrors);
         } 
@@ -74,13 +74,13 @@ class Api {
             method: 'POST',
             headers: {authorization: `Bearer ${localStorage.getItem('jwt')}`, ...this._headers},
             body: JSON.stringify({
-                country: movie.country,
-                director: movie.director,
-                duration: movie.duration,
-                year: movie.year,
+                country: movie.country || 'Нет данных',
+                director: movie.director || 'Нет данных',
+                duration: movie.duration || 0,
+                year: movie.year || 'Нет данных',
                 description: movie.description,
                 image: `https://api.nomoreparties.co${movie.image.url}`,
-                trailerLink: movie.trailerLink,
+                trailerLink: movie.trailerLink || 'https://www.youtube.com',
                 nameRU: movie.nameRU,
                 nameEN: movie.nameEN,
                 thumbnail: `https://api.nomoreparties.co${movie.image.url}`,
