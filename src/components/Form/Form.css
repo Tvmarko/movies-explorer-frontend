@@ -74,10 +74,6 @@
     outline: none;
   }
   
-  .form__field_error {
-    color: #ff3055;
-  }
-  
   .form__error {
     display: block;
     margin: 10px 0 0;
@@ -91,7 +87,27 @@
   .form__error_text {
     opacity: 1;
   }
-  
+    
+  .form__text-error {
+    font-weight: normal;
+    font-size: 11px;
+    line-height: 13px;
+    color: #ff004c;
+  }
+
+  .form__field_error {
+    outline: 0;
+    border-bottom: 1px solid #ff004c;
+    color: #ee3465;
+    font-size: 12px;
+  }
+
+  .form__response {
+    display: flex;
+    justify-content: center;
+    margin: 80px auto 20px;
+  }
+
   .form__button {
     margin: 69px 0 17px;
     padding: 13px 0 15px;
@@ -111,8 +127,9 @@
     margin-top: 169px;
   }
 
-  .form__button_login_inactive {
-    opacity: .2;
+  .form__button_inactive {
+    color: #c2c2c2;
+    background: #f8f8f8;
     cursor: default;
   }
 

@@ -12,6 +12,7 @@ function MoviesCardList(props) {
     deleteMovie,
     deleteSavedMovie,
     count,
+    message,
    } = props;
 
    const [addMoreMovies, setAddMoreMovies] = useState(0);
@@ -54,7 +55,10 @@ function MoviesCardList(props) {
     <section className="moviescard-list">
       <div className="moviescard-list__container">
       <Suspense fallback={<Preloader />}>
-        {movies.slice(0, count.countMovies).map((movie) => (
+      {message ? (
+            <p className="movies-message">{message}</p>
+          ) : (
+        movies.slice(0, count.countMovies).map((movie) => (
         <MoviesCard
           key={movie.id || movie.movieId}
           movie={movie}             
@@ -65,7 +69,7 @@ function MoviesCardList(props) {
           deleteSavedMovie={deleteSavedMovie}
           />
         ))
-      }
+      )}
       </Suspense>
       </div>
       { ((movies.length > count.countMovies) || (movies.length <! 4)) ? (

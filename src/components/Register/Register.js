@@ -1,27 +1,62 @@
-import React, { useState } from "react";
+import React, { useState,  useEffect } from "react";
 import Form from "../Form/Form";
 
-function Register({handleRegister}) {
+function Register({handleRegister, message}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [formValid, setFormValid] = useState(false);
 
-  function handleChangeName(evt) {
+  function handleNameChange(evt) {
+    const validName = /^[A-Za-zА-Яа-яЁё /s -]+$/.test(evt.target.value);
+    if (evt.target.value.length < 2) {
+      setNameError("Введите не менее 2 символов");
+    } else if (evt.target.value.length > 30) {
+      setNameError("Введите не более 30 символов");
+    } else if (!validName) {
+      setNameError("Используйте латиницу, кириллицу, пробел или дефис");
+    } else {
+      setNameError("");
+    }
     setName(evt.target.value);
-    }
+  }
   
-  function handleChangeEmail(evt) {
-    setEmail(evt.target.value);
+  function handleEmailChange(evt) {
+    const validEmail = /^([^ ]+@[^ ]+\.[a-z]{2,6}|)$/i.test(evt.target.value);
+    if (!validEmail) {
+      setEmailError("Неверный формат почты");
+    } else {
+      setEmailError("");
     }
-    
-  function handleChangePassword(evt) {
+    setEmail(evt.target.value);
+  }
+        
+  function handlePasswordChange(evt) {
+    if (evt.target.value.length < 8) {
+      setPasswordError("Длина пароля должна быть не менее 8 символов");
+    } else {
+      setPasswordError("");
+    }
     setPassword(evt.target.value);
     }
+    
     
   function handleRegisterSubmit(evt) {
     evt.preventDefault();
     handleRegister(name, email, password);
   }
+   
+  useEffect(() => {
+    if ( name && email && password && !nameError && !emailError && !passwordError) {
+      setFormValid(true);
+    } else {
+      setFormValid(false);
+    }
+  }, [name, email, password, nameError, emailError, passwordError]);
+    
   return (
     <Form 
       title="Добро пожаловать!"
@@ -35,22 +70,26 @@ function Register({handleRegister}) {
         <p className="form__item-text">Имя</p>
         <input 
           type="text" 
-          className="form__field" 
+          className={`form__field ${nameError ? "form__text-error" : ""}`} 
+          id="name-input"
           name="name"
           value={name}
           placeholder="Name"
           minLength="2" 
           maxLength="20"
           required
-          onChange={handleChangeName}
+          onChange={handleNameChange}
           />
-        <p className="form__error"></p>
+          <span id="name-input-error" className="form__text-error">
+            {nameError}
+          </span>
       </label>
 
       <label className="form__item">
         <p className="form__item-text">E-mail</p>
         <input 
-          className="form__field" 
+          className={`form__field ${emailError ? "form__text-error" : ""}`} 
+          id="email-input"
           type="email"
           name="email"
           value={email}
@@ -58,27 +97,38 @@ function Register({handleRegister}) {
           minLength="6" 
           maxLength="30"
           required
-          onChange={handleChangeEmail}
+          onChange={handleEmailChange}
           />
-        <p className="form__error"></p>
+          <span id="name-input-error" className="form__text-error">
+            {emailError}
+          </span>
       </label>
 
       <label className="form__item">
         <p className="form__item-text">Пароль</p>
         <input 
-            className="form__field" 
+            className={`form__field ${passwordError ? "form__text-error" : ""}`}
+            id="password-input"
             type="password"
             name="password"
             value={password}
             placeholder="Пароль"
-            minLength="6" 
+            minLength="8" 
             maxLength="12"
             required 
-            onChange={handleChangePassword}
+            onChange={handlePasswordChange}
           />
-        <p className="form__error form__error_text"></p>
+          <span id="name-input-error" className="form__text-error">
+            {passwordError}
+          </span>
       </label>
-      <button className="form__button" type="submit">
+
+      <div className="form__text-error form__response">
+            {message}
+      </div>
+      <button className={`form__button ${!formValid  ? "form__button_inactive" : ""}`} 
+      type="submit"
+      disabled={!formValid}>
         Зарегистрироваться
       </button>
     </Form>

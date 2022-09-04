@@ -9,20 +9,34 @@ function SavedMovies(props) {
   const {
     savedMovies,
     searchMovies,
-    deleteSavedMovie, 
-    } = props;
+    isShortMovie,
+    searchShortMovies,
+    deleteSavedMovie,
+    filmsInputSearch,
+    message,
+  } = props;
 
   return (
     <>
     <Header/>
     <main className="movies">
-      <SearchForm searchMovies={searchMovies}/>
+      <SearchForm 
+       searchMovies={searchMovies} 
+       isShortMovie={isShortMovie} 
+       searchShortMovies={searchShortMovies} 
+       filmsInputSearch={filmsInputSearch}
+       />
+      {savedMovies.length > 0 ? (
       <MoviesCardList 
       movies={savedMovies}
       deleteSavedMovie={deleteSavedMovie}
       pathSavedMovie={true}
       count={{ countMovies, setCountMovies }}
-           />
+      message={message}
+      />
+      ) : (
+        <p className="movies-message">У вас пока нет сохраненных фильмов</p>
+      )}
       <div className="more-movies-card"></div>
     </main>
     <Footer />

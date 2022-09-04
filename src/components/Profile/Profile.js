@@ -90,8 +90,8 @@ function Profile({ onSignOut, editProfile }) {
             maxLength="30" 
             required 
             disabled={!isInputInactive}/>
-            <span className=".profile__input-error profile_span">{nameError}</span>
           </div>
+          <span className="profile__input-error profile_span">{nameError}</span>
           <div className="profile__input-container">
             <p className="profile__text">E-mail</p>
             <input 
@@ -106,8 +106,8 @@ function Profile({ onSignOut, editProfile }) {
             maxLength="30" 
             required 
             disabled={!isInputInactive}/>
-            <span className="profile__input-error">{emailError}</span>
           </div>
+          <span className="profile__input-error">{emailError}</span>
         </div>
       </div>
         <button 

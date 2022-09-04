@@ -23,13 +23,16 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isShortMovies, setIsShortMovies] = useState(false);
-        
+  const [moviesMessage, setMoviesMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const [filmsInputSearch, setFilmsInputSearch] = useState('');
+                 
   useEffect(() => {
-    checkToken();
-    history.push('/');
-    if(loggedIn) {
+    const token = localStorage.getItem("jwt");
+    if((token !== null)) {
       mainApi.getProfileInfo()
         .then(({ name, email, _id }) => {
+          setLoggedIn(true);
           setCurrentUser({ name, email, _id });
           history.push(location.pathname);
         })
@@ -39,19 +42,34 @@ function App() {
   }
         // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [loggedIn, history]);
+  
+useEffect(() => {
+  const token = localStorage.getItem("jwt");
+  if(token){
+    mainApi.checkToken(token)
+      .then((res) => {
+        if(res){
+          setLoggedIn(true);
+          history.push("/movies");
+        }
+      })
+      .catch((err) => {
+        console.log(err); 
+      });
+  }
+}, [history]);
 
   useEffect(() => {
-    if (loggedIn && location.pathname === "/movies") {
-        moviesApi.getMovies()
-        .then((allMovies) => {
-          localStorage.setItem("movieList", JSON.stringify(allMovies));
-        })
-        .catch((err) => {
-          console.log(`Ошибка при загрузке фильмов: ${err}`)
+  if (loggedIn && location.pathname === "/movies") {
+    moviesApi.getMovies()
+        .then((res) => {
+        localStorage.setItem("movieList", JSON.stringify(res));
       })
-    }
-  }, [loggedIn, location]);
-
+      .catch((err) => {
+        console.log(`Ошибка при загрузке фильмов: ${err}`)
+    })
+  }
+}, [loggedIn, location, currentUser]);
 
 useEffect(() => {
   if (loggedIn && (location.pathname === "/saved-movies"|| location.pathname === "/movies")) {
@@ -63,55 +81,45 @@ useEffect(() => {
               })
               .catch((err) => {
                 console.log(`Ошибка при загрузке фильмов: ${err}`)
-              })
-          }
+              });
+
+              const localStorageFilmsInputSearch = localStorage.getItem("keyword");
+              if (localStorageFilmsInputSearch) {
+                setFilmsInputSearch(localStorageFilmsInputSearch);
+              }
+            }
 }, [loggedIn, location, currentUser]);
 
-useEffect(() => {
-  const token = localStorage.getItem('jwt');
-  if(token){
-    mainApi.checkToken(token)
-      .then((res) => {
-        if(res){
-          checkToken();
-          history.push("/movies");
-        }
-      })
-      .catch((err) => {
-        console.log(err); 
-      });
-  }
-}, [history]);
-
-function checkToken() {
-  const jwt = localStorage.getItem('jwt');
-  if (jwt) {
-    setLoggedIn(true);
-  }
-}
-
-function handleSearchMovie(movie) {
-  const movieList = JSON.parse(localStorage.getItem('movieList'));
+function handleSearchMovie(keyword) {
+  const movieList = JSON.parse(localStorage.getItem("movieList"));
   if (movieList) {
     const searchedMovies = movieList.filter(
-      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
-    if (searchedMovies.length) {
+      (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
+      localStorage.setItem("movieList", JSON.stringify(searchedMovies));
+      localStorage.setItem("keyword", keyword);
+      if (searchedMovies.length) {
       setMovies(searchedMovies);
+      setMoviesMessage("");
       } else {
-      setMovies([]);
+        setMovies([]);
+        setMoviesMessage("Ничего не найдено");
       }
     }
   }
-  
-  function handleSearchSavedMovie(movie) {
+    
+  function handleSearchSavedMovie(keyword) {
     const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
     if (savedMovieList) {
     const searchSavedMovies = savedMovieList.filter(
-      (item) => (item.nameRU.toLowerCase().includes(movie.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
+      (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
+      localStorage.setItem('savedMovieList', JSON.stringify(searchSavedMovies));
+      localStorage.setItem('keyword', keyword);
       if (searchSavedMovies.length) {
         setSavedMovies(searchSavedMovies);
+        setMoviesMessage("");
         } else {
         setSavedMovies([]);
+        setMoviesMessage("Ничего не найдено");
         }
       }
     }
@@ -148,7 +156,7 @@ function handleMovieForDelete(movie) {
 
 function searchShortMovies() {
   setIsShortMovies(!isShortMovies);
-}
+ }
 
 function editProfile(user) {
   mainApi.editProfile(user)
@@ -158,9 +166,15 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
+    setMessage("Профиль обновлен");
   })
   .catch((err) => {
     console.log(`Ошибка: ${err}`);
+    if (err.status === 409) {
+      setMessage("Пользователь с таким email уже существует");
+    } else {
+      setMessage("При изменении данных профиля произошла ошибка");
+    }
    });
 }
 
@@ -170,10 +184,16 @@ function handleRegister(name, email, password) {
     if (res) {
       handleLogin(email, password);
       setCurrentUser(res);
+      setMessage("");
     }
 })
-  .catch((err) => {
-    console.log(`Ошибка при регистрации: ${err}`);
+.catch((err) => {
+  console.log(`Ошибка: ${err}`);
+  if (err === 409) {
+    setMessage("Пользователь с таким email уже существует");
+  } else {
+    setMessage("Ошибка при регистрации пользователя");
+  }
   });
 }
 
@@ -182,12 +202,20 @@ function handleLogin(email, password) {
   .then((data) => {
     if(data.token) {
       localStorage.setItem("jwt", data.token);
-      checkToken();
+      setLoggedIn(true);
+      setMessage("");
       history.push("/movies");
     }
   })
   .catch((err) => {
-    console.log(`Ошибка при авторизации: ${err}`);
+    console.log(`Ошибка: ${err}`);
+    setMessage("Ошибка при авторизации пользователя");
+        if (err === 401) {
+          setMessage("Пользователя с таким email не существует");
+        }
+        if (err === 400) {
+          setMessage("Неверный email или пароль");
+        }
     localStorage.removeItem("jwt");
   });
   }
@@ -195,6 +223,9 @@ function handleLogin(email, password) {
   function handleSignOut() {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("movies");
+    localStorage.removeItem("savedMovies");
     setMovies([]);
     setSavedMovies([]);
     setCurrentUser({});
@@ -221,6 +252,8 @@ function handleLogin(email, password) {
             saveMovie={handleSaveMovie}
             searchMovies={handleSearchMovie}
             deleteMovie={handleMovieForDelete}
+            message={moviesMessage}
+            filmsInputSearch={filmsInputSearch}
             component={Movies}>
         </ProtectedRoute>
         <ProtectedRoute path="/saved-movies"
@@ -231,16 +264,21 @@ function handleLogin(email, password) {
             isShortMovie={isShortMovies}
             searchShortMovies ={searchShortMovies}
             deleteSavedMovie={handleDeleteMovie}
+            message={moviesMessage}
+            filmsInputSearch={filmsInputSearch}
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">
           <Register 
            handleRegister={handleRegister} 
+           message={message}
         />
         </Route>
         <Route path="/signin">
           <Login 
             handleLogin={handleLogin} 
+            loggedIn={loggedIn}
+            message={message}
         />
         </Route>
         <ProtectedRoute path="/profile"
