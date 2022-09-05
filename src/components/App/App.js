@@ -66,8 +66,18 @@ useEffect(() => {
         localStorage.setItem("movieList", JSON.stringify(res));
       })
       .catch((err) => {
-        console.log(`Ошибка при загрузке фильмов: ${err}`)
+        console.log(err); 
+        setMessage({
+          successful: false,
+          message:
+            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
+        });
     })
+    const localStorageFilmsInputSearch = localStorage.getItem("keyword");
+    if (localStorageFilmsInputSearch) {
+      setFilmsInputSearch(localStorageFilmsInputSearch);
+      setMovies(JSON.parse(localStorage.getItem("foundMovieList")));
+    }
   }
 }, [loggedIn, location, currentUser]);
 
@@ -80,13 +90,13 @@ useEffect(() => {
                  setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
               })
               .catch((err) => {
-                console.log(`Ошибка при загрузке фильмов: ${err}`)
+                console.log(err);
+                setMessage({
+                  successful: false,
+                  message:
+                    "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
+                });
               });
-
-              const localStorageFilmsInputSearch = localStorage.getItem("keyword");
-              if (localStorageFilmsInputSearch) {
-                setFilmsInputSearch(localStorageFilmsInputSearch);
-              }
             }
 }, [loggedIn, location, currentUser]);
 
@@ -95,7 +105,7 @@ function handleSearchMovie(keyword) {
   if (movieList) {
     const searchedMovies = movieList.filter(
       (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
-      localStorage.setItem("movieList", JSON.stringify(searchedMovies));
+      localStorage.setItem("foundMovieList", JSON.stringify(searchedMovies));
       localStorage.setItem("keyword", keyword);
       if (searchedMovies.length) {
       setMovies(searchedMovies);
@@ -108,12 +118,9 @@ function handleSearchMovie(keyword) {
   }
     
   function handleSearchSavedMovie(keyword) {
-    const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
-    if (savedMovieList) {
-    const searchSavedMovies = savedMovieList.filter(
+    const searchSavedMovies = savedMovies.filter(
       (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
       localStorage.setItem('savedMovieList', JSON.stringify(searchSavedMovies));
-      localStorage.setItem('keyword', keyword);
       if (searchSavedMovies.length) {
         setSavedMovies(searchSavedMovies);
         setMoviesMessage("");
@@ -121,7 +128,7 @@ function handleSearchMovie(keyword) {
         setSavedMovies([]);
         setMoviesMessage("Ничего не найдено");
         }
-      }
+      
     }
   
   function handleSaveMovie(movie) {
