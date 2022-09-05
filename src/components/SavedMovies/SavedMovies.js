@@ -12,7 +12,6 @@ function SavedMovies(props) {
     isShortMovie,
     searchShortMovies,
     deleteSavedMovie,
-    filmsInputSearch,
     message,
   } = props;
 
@@ -24,7 +23,6 @@ function SavedMovies(props) {
        searchMovies={searchMovies} 
        isShortMovie={isShortMovie} 
        searchShortMovies={searchShortMovies} 
-       filmsInputSearch={filmsInputSearch}
        />
       {savedMovies.length > 0 ? (
       <MoviesCardList 

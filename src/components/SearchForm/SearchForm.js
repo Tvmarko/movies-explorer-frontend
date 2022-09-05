@@ -11,7 +11,7 @@ function SearchForm(props) {
   const [findedMovie, setFindedMovie] = useState("");
   const [error, setError] = useState("");  
   const [formValid, setFormValid] = useState(false);
-     
+  
   useEffect(() => {
      setFindedMovie(filmsInputSearch);
   }, [filmsInputSearch]);
@@ -52,7 +52,7 @@ function SearchForm(props) {
         className="search__input" 
         placeholder="Фильм" 
         type="text" 
-        value={findedMovie}
+        value={findedMovie || ''}
         minLength="2"
         maxLength="30"
         required 

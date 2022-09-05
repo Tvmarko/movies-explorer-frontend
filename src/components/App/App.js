@@ -26,7 +26,7 @@ function App() {
   const [moviesMessage, setMoviesMessage] = useState("");
   const [message, setMessage] = useState("");
   const [filmsInputSearch, setFilmsInputSearch] = useState('');
-                 
+                   
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if((token !== null)) {
@@ -63,7 +63,9 @@ useEffect(() => {
   if (loggedIn && location.pathname === "/movies") {
     moviesApi.getMovies()
         .then((res) => {
+          if (res.length) {
         localStorage.setItem("movieList", JSON.stringify(res));
+        }
       })
       .catch((err) => {
         console.log(err); 
@@ -73,11 +75,6 @@ useEffect(() => {
             "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
         });
     })
-    const localStorageFilmsInputSearch = localStorage.getItem("keyword");
-    if (localStorageFilmsInputSearch) {
-      setFilmsInputSearch(localStorageFilmsInputSearch);
-      setMovies(JSON.parse(localStorage.getItem("foundMovieList")));
-    }
   }
 }, [loggedIn, location, currentUser]);
 
@@ -97,6 +94,17 @@ useEffect(() => {
                     "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
                 });
               });
+
+              const localStorageFilmsInputSearch = localStorage.getItem("keyword");
+              if (localStorageFilmsInputSearch) {
+                setFilmsInputSearch(localStorageFilmsInputSearch);
+                setMovies(JSON.parse(localStorage.getItem("foundMovieList")));
+              }
+              const isShortMoviesStateFromStorage =
+                localStorage.getItem("isShortMovies") === "true";
+                if (isShortMoviesStateFromStorage) {
+                setIsShortMovies(isShortMoviesStateFromStorage);
+                }
             }
 }, [loggedIn, location, currentUser]);
 
@@ -118,8 +126,10 @@ function handleSearchMovie(keyword) {
   }
     
   function handleSearchSavedMovie(keyword) {
-    const searchSavedMovies = savedMovies.filter(
-      (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
+    const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
+    if (savedMovieList) {
+    const searchSavedMovies = savedMovieList.filter(
+    (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
       localStorage.setItem('savedMovieList', JSON.stringify(searchSavedMovies));
       if (searchSavedMovies.length) {
         setSavedMovies(searchSavedMovies);
@@ -128,7 +138,7 @@ function handleSearchMovie(keyword) {
         setSavedMovies([]);
         setMoviesMessage("Ничего не найдено");
         }
-      
+      }
     }
   
   function handleSaveMovie(movie) {
@@ -163,7 +173,8 @@ function handleMovieForDelete(movie) {
 
 function searchShortMovies() {
   setIsShortMovies(!isShortMovies);
- }
+  localStorage.setItem("isShortMovies", isShortMovies);
+}
 
 function editProfile(user) {
   mainApi.editProfile(user)
@@ -231,11 +242,14 @@ function handleLogin(email, password) {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
     localStorage.removeItem("currentUser");
-    localStorage.removeItem("movies");
-    localStorage.removeItem("savedMovies");
+    localStorage.removeItem("movieList");
+    localStorage.removeItem("savedMovieList");
+    localStorage.removeItem("foundMovieList");
+    localStorage.removeItem("keyword");
     setMovies([]);
     setSavedMovies([]);
     setCurrentUser({});
+    setFilmsInputSearch([]);
     history.push('/');
   }
 
@@ -272,7 +286,6 @@ function handleLogin(email, password) {
             searchShortMovies ={searchShortMovies}
             deleteSavedMovie={handleDeleteMovie}
             message={moviesMessage}
-            filmsInputSearch={filmsInputSearch}
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">
