@@ -101,7 +101,7 @@ useEffect(() => {
                 setMovies(JSON.parse(localStorage.getItem("foundMovieList")));
               }
               const isShortMoviesStateFromStorage =
-                localStorage.getItem("isShortMovies") === "true";
+                localStorage.getItem("!isShortMovies") === "true";
                 if (isShortMoviesStateFromStorage) {
                 setIsShortMovies(isShortMoviesStateFromStorage);
                 }
@@ -173,7 +173,7 @@ function handleMovieForDelete(movie) {
 
 function searchShortMovies() {
   setIsShortMovies(!isShortMovies);
-  localStorage.setItem("isShortMovies", isShortMovies);
+  localStorage.setItem("!isShortMovies", !isShortMovies);
 }
 
 function editProfile(user) {
