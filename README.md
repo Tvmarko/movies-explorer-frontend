@@ -19,7 +19,7 @@
 * Grid Layout.
 
 
-[Ссылка на репозиторий](https://github.com/Tvmarko/movies-explorer-frontend/pull/2
+[Ссылка на репозиторий](https://github.com/Tvmarko/movies-explorer-frontend/pull/2)
 [Ссылка на проект](https://diplomabytvmarko.nomorepartiesxyz.ru)
 Домен сервера: api.diplomabytvmarko.nomoredomains.xyz
 Публичный IP-адрес сервера: 51.250.5.27
