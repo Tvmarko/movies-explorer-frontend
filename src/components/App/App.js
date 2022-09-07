@@ -26,6 +26,7 @@ function App() {
   const [moviesMessage, setMoviesMessage] = useState("");
   const [message, setMessage] = useState("");
   const [filmsInputSearch, setFilmsInputSearch] = useState('');
+  
                    
   useEffect(() => {
     const token = localStorage.getItem("jwt");
@@ -184,7 +185,10 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
-    setMessage("Профиль обновлен");
+    setMessage({
+      successful: true,
+      message: "Профиль обновлен",
+    });
   })
   .catch((err) => {
     console.log(`Ошибка: ${err}`);
@@ -202,7 +206,10 @@ function handleRegister(name, email, password) {
     if (res) {
       handleLogin(email, password);
       setCurrentUser(res);
-      setMessage("");
+      setMessage({
+        successful: true,
+        message: "Вы успешно зарегистрировались!",
+      });
     }
 })
 .catch((err) => {

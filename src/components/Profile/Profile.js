@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./Profile.css";
+import Header from "../Header/Header";
 import {Link} from "react-router-dom";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 
-function Profile({ onSignOut, editProfile }) {
+function Profile({ loggedIn, onSignOut, editProfile }) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -72,6 +73,8 @@ function Profile({ onSignOut, editProfile }) {
   }
 
  return (
+  <>
+  <Header loggedIn={loggedIn} />
     <form className="profile" onSubmit={handleProfileSubmit}>
       <div className="profile__form" >
         <h3 className="profile__username">{`Привет, ${currentUser.name}!`}</h3>
@@ -119,6 +122,7 @@ function Profile({ onSignOut, editProfile }) {
         </button>
         <Link to="/" className="profile__sign-out btn link" onClick={onSignOut} type="button">Выйти из аккаунта</Link>
     </form>
+    </>
   );
 };
 

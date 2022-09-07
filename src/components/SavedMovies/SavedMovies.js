@@ -13,11 +13,12 @@ function SavedMovies(props) {
     searchShortMovies,
     deleteSavedMovie,
     message,
+    loggedIn,
   } = props;
 
   return (
     <>
-    <Header/>
+    <Header loggedIn={loggedIn} />
     <main className="movies">
       <SearchForm 
        searchMovies={searchMovies} 

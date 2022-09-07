@@ -1,9 +1,9 @@
 import React from "react";
-import { Route, Link, Switch, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import "./Header.css";
 import Navigation from "../Navigation/Navigation";
 
-function Header() {
+function Header({loggedIn}) {
   const [isMenuOpen, setMenuOpen] = React.useState(false);
 
   function toggleMenu() {
@@ -13,13 +13,14 @@ function Header() {
   const isMain = useRouteMatch({ path: "/", exact: true });
 
   return (
-    <header className={`header ${isMain ? "header_dark" : ""}`}>
-      <Link to="/"> 
+    <header className={`header ${isMain  ? "header_dark" : ""}`}>
+        <Link to="/"> 
           <div className={`header__logo ${isMain ? "logo": "logo2"}`}></div>
         </Link>
-      <Switch>
-        <Route exact path="/">
-          <div className="header__container">
+        {loggedIn ? (
+          <Navigation toggleMenu={toggleMenu} isMenuOpen={isMenuOpen} />
+          ) : (
+           <div className="header__container">
             <Link className="header__register link" to="/signup">
               Регистрация
             </Link>
@@ -27,13 +28,9 @@ function Header() {
               <button className="header__button btn" type="button">Войти</button>
             </Link>
           </div>
-        </Route>
-        <Route path={["/movies", "/saved-movies", "/profile"]}>
-          <Navigation toggleMenu={toggleMenu} isMenuOpen={isMenuOpen}  />
-        </Route>
-      </Switch>
+          )}
     </header>
-  );
-}
+         )
+    }
 
 export default Header;
