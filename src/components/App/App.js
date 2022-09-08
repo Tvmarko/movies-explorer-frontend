@@ -151,38 +151,13 @@ function handleSearchMovie(keyword) {
  }
  
  useEffect(() => {
+  if (filmsInputSearch) {
    handleSearchMovie(filmsInputSearch);
+  } 
  // eslint-disable-next-line react-hooks/exhaustive-deps 
-}, [isShortMovies]);
-
-
- useEffect(() => {
-  if (isShortMovies) {
-    handleSearchMovie(filmsInputSearch);
-  } else {
-     setMovies([]);
-    }
-   // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isShortMovies]);
 
-useEffect(() => {
-  if (isShortMovies) {
-    if (localStorage.searchSavedMovies) {
-      setSavedMovies(
-        filterShortMovies(JSON.parse(localStorage.getItem("savedMovieList")))
-      );
-    } else {
-      setSavedMovies([]);
-    }
-  } else {
-    if (localStorage.searchSavedMovies) {
-      setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
-    } else {
-      setSavedMovies([]);
-    }
-  }
-}, [isShortMovies]);
-
+   
   function handleSaveMovie(movie) {
     mainApi
       .addMovie(movie)
