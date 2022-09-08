@@ -39,27 +39,13 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
+          setLoggedIn(false);
+          history.push("/");
     });
   }
         // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [loggedIn, history]);
   
-useEffect(() => {
-  const token = localStorage.getItem("jwt");
-  if(token){
-    mainApi.checkToken(token)
-      .then((res) => {
-        if(res){
-          setLoggedIn(true);
-          history.push("/movies");
-        }
-      })
-      .catch((err) => {
-        console.log(err); 
-      });
-  }
-}, [history]);
-
   useEffect(() => {
   if (loggedIn && location.pathname === "/movies") {
     moviesApi.getMovies()
@@ -80,7 +66,7 @@ useEffect(() => {
 }, [loggedIn, location, currentUser]);
 
 useEffect(() => {
-  if (loggedIn && (location.pathname === "/saved-movies"|| location.pathname === "/movies")) {
+  if (loggedIn && (location.pathname === "/saved-movies" || location.pathname === "/movies")) {
           mainApi.getMovies()
               .then((res) => {
                  const savedMoviesList = res.filter(item => (item.owner === currentUser._id));
@@ -97,10 +83,13 @@ useEffect(() => {
               });
 
               const localStorageFilmsInputSearch = localStorage.getItem("keyword");
-              if (localStorageFilmsInputSearch) {
+              if (localStorageFilmsInputSearch && location.pathname === "/movies") {
                 setFilmsInputSearch(localStorageFilmsInputSearch);
                 setMovies(JSON.parse(localStorage.getItem("foundMovieList")));
               }
+              if (localStorageFilmsInputSearch && location.pathname === "/saved-movies") {
+                setFilmsInputSearch("");
+               }
               const isShortMoviesStateFromStorage =
                 localStorage.getItem("!isShortMovies") === "true";
                 if (isShortMoviesStateFromStorage) {
@@ -109,16 +98,27 @@ useEffect(() => {
             }
 }, [loggedIn, location, currentUser]);
 
+useEffect(() => {
+  if (location.pathname === "/saved-movies") {
+    handleSearchSavedMovie(filmsInputSearch);
+  } else {
+    if (filmsInputSearch) {
+      handleSearchMovie(filmsInputSearch);
+    }
+  }
+ // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, [isShortMovies, location.pathname]);
+
 function handleSearchMovie(keyword) {
   const movieList = JSON.parse(localStorage.getItem("movieList"));
   if (movieList) {
     let searchedMovies = movieList.filter(
       (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())));
-      localStorage.setItem("foundMovieList", JSON.stringify(searchedMovies));
-      localStorage.setItem("keyword", keyword);
       if (isShortMovies) {
         searchedMovies = filterShortMovies(searchedMovies)
       }
+      localStorage.setItem("foundMovieList", JSON.stringify(searchedMovies));
+      localStorage.setItem("keyword", keyword);
       if (searchedMovies.length === 0) {
         setMoviesMessage("Ничего не найдено");
        } else {
@@ -137,8 +137,7 @@ function handleSearchMovie(keyword) {
     if (savedMovieList) {
     let searchSavedMovies = savedMovieList.filter(
     (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())));
-      localStorage.setItem('savedMovieList', JSON.stringify(searchSavedMovies));
-      if (isShortMovies) {
+     if (isShortMovies) {
         searchSavedMovies = filterShortMovies(searchSavedMovies)
       }
       if (searchSavedMovies.length === 0) {
@@ -150,15 +149,7 @@ function handleSearchMovie(keyword) {
    }
  }
  
- useEffect(() => {
-  if (filmsInputSearch) {
-   handleSearchMovie(filmsInputSearch);
-  } 
- // eslint-disable-next-line react-hooks/exhaustive-deps 
-  }, [isShortMovies]);
-
-   
-  function handleSaveMovie(movie) {
+ function handleSaveMovie(movie) {
     mainApi
       .addMovie(movie)
       .then((userAddedMovie) => {
