@@ -112,36 +112,77 @@ useEffect(() => {
 function handleSearchMovie(keyword) {
   const movieList = JSON.parse(localStorage.getItem("movieList"));
   if (movieList) {
-    const searchedMovies = movieList.filter(
-      (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
+    let searchedMovies = movieList.filter(
+      (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())));
       localStorage.setItem("foundMovieList", JSON.stringify(searchedMovies));
       localStorage.setItem("keyword", keyword);
-      if (searchedMovies.length) {
-      setMovies(searchedMovies);
-      setMoviesMessage("");
-      } else {
-        setMovies([]);
+      if (isShortMovies) {
+        searchedMovies = filterShortMovies(searchedMovies)
+      }
+      if (searchedMovies.length === 0) {
         setMoviesMessage("Ничего не найдено");
+       } else {
+        setMovies(searchedMovies);
+        setMoviesMessage("");
       }
     }
   }
     
+  function filterShortMovies(moviesArr) {
+    return moviesArr.filter((movie) => movie.duration <= 40);
+  }
+
   function handleSearchSavedMovie(keyword) {
     const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
     if (savedMovieList) {
-    const searchSavedMovies = savedMovieList.filter(
-    (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())) && (isShortMovies ? item.duration < 40 : ' '));
+    let searchSavedMovies = savedMovieList.filter(
+    (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())));
       localStorage.setItem('savedMovieList', JSON.stringify(searchSavedMovies));
-      if (searchSavedMovies.length) {
-        setSavedMovies(searchSavedMovies);
-        setMoviesMessage("");
-        } else {
-        setSavedMovies([]);
-        setMoviesMessage("Ничего не найдено");
-        }
+      if (isShortMovies) {
+        searchSavedMovies = filterShortMovies(searchSavedMovies)
       }
+      if (searchSavedMovies.length === 0) {
+        setMoviesMessage("Ничего не найдено");
+      } else {
+        setSavedMovies(searchSavedMovies);
+       setMoviesMessage("");
+     }
+   }
+ }
+ 
+ useEffect(() => {
+   handleSearchMovie(filmsInputSearch);
+ // eslint-disable-next-line react-hooks/exhaustive-deps 
+}, [isShortMovies]);
+
+
+ useEffect(() => {
+  if (isShortMovies) {
+    handleSearchMovie(filmsInputSearch);
+  } else {
+     setMovies([]);
     }
-  
+   // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, [isShortMovies]);
+
+useEffect(() => {
+  if (isShortMovies) {
+    if (localStorage.searchSavedMovies) {
+      setSavedMovies(
+        filterShortMovies(JSON.parse(localStorage.getItem("savedMovieList")))
+      );
+    } else {
+      setSavedMovies([]);
+    }
+  } else {
+    if (localStorage.searchSavedMovies) {
+      setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
+    } else {
+      setSavedMovies([]);
+    }
+  }
+}, [isShortMovies]);
+
   function handleSaveMovie(movie) {
     mainApi
       .addMovie(movie)
@@ -282,6 +323,7 @@ function handleLogin(email, password) {
             deleteMovie={handleMovieForDelete}
             message={moviesMessage}
             filmsInputSearch={filmsInputSearch}
+            setFilmsInputSearch={setFilmsInputSearch}
             component={Movies}>
         </ProtectedRoute>
         <ProtectedRoute path="/saved-movies"
@@ -293,6 +335,8 @@ function handleLogin(email, password) {
             searchShortMovies ={searchShortMovies}
             deleteSavedMovie={handleDeleteMovie}
             message={moviesMessage}
+            filmsInputSearch={filmsInputSearch}
+            setFilmsInputSearch={setFilmsInputSearch}
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">

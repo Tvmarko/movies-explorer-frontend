@@ -14,7 +14,7 @@ function MoviesCardList(props) {
     count,
     message,
    } = props;
-
+  //const moviesArray = Array.from(movies);
    const [addMoreMovies, setAddMoreMovies] = useState(0);
 
    const getMoreMovies = () => {
@@ -58,7 +58,7 @@ function MoviesCardList(props) {
       {message ? (
             <p className="movies-message">{message}</p>
           ) : (
-        movies.slice(0, count.countMovies).map((movie) => (
+            movies.slice(0, count.countMovies).map((movie) => (
         <MoviesCard
           key={movie.id || movie.movieId}
           movie={movie}             

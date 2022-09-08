@@ -17,6 +17,7 @@ function Movies(props) {
     searchShortMovies,
     deleteMovie,
     message,
+    setFilmsInputSearch,
     filmsInputSearch,
     loggedIn,
   } = props;
@@ -30,6 +31,7 @@ function Movies(props) {
       isShortMovie={isShortMovie} 
       searchShortMovies={searchShortMovies} 
       filmsInputSearch={filmsInputSearch}
+      setFilmsInputSearch= {setFilmsInputSearch}
       />
       <MoviesCardList 
       movies={movies} 
@@ -44,5 +46,6 @@ function Movies(props) {
 </>
 );
 }
+
 
 export default Movies; 

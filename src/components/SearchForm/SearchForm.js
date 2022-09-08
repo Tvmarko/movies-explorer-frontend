@@ -7,6 +7,7 @@ function SearchForm(props) {
       isShortMovie,
       searchShortMovies,
       filmsInputSearch,
+      setFilmsInputSearch,
     } = props;
   const [findedMovie, setFindedMovie] = useState("");
   const [error, setError] = useState("");  
@@ -20,8 +21,8 @@ function SearchForm(props) {
     setFindedMovie(e.target.value);
     if (e.target.value.length === 0) {
       setError("Нужно ввести ключевое слово");
-    } else if (e.target.value.length < 2) {
-      setError("Длина должна быть не менее 2 символов"); 
+    } else if (e.target.value.length < 1) {
+      setError("Длина должна быть не менее 1 символа"); 
    } else if (e.target.value.length > 30) {
      setFormValid(false);
        setError("Длина должна должна быть не более 30 символов");
@@ -33,7 +34,7 @@ function SearchForm(props) {
   function handleSearchSubmit(e) {
     e.preventDefault();
     searchMovies(findedMovie);
-    setFindedMovie("");
+    setFilmsInputSearch(findedMovie);
     setError("");
   }
 
