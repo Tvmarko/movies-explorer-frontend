@@ -151,7 +151,7 @@ function handleSearchMovie(keyword) {
   mainApi
     .addMovie(movie)
     .then((userAddedMovie) => {
-        localStorage.setItem("savedMovieList", JSON.stringify([userAddedMovie, ...savedMovies]));
+        localStorage.setItem([userAddedMovie, ...savedMovies]);
         setSavedMovies([userAddedMovie, ...savedMovies]);
       })
     .catch((err) => {
