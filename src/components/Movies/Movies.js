@@ -16,10 +16,11 @@ function Movies(props) {
     isShortMovie,
     searchShortMovies,
     deleteMovie,
-    message,
     setFilmsInputSearch,
     filmsInputSearch,
     loggedIn,
+    serverError,
+    message,
   } = props;
 
   return (
@@ -39,6 +40,7 @@ function Movies(props) {
       savedMovies={savedMovies}
       deleteMovie={deleteMovie} 
       count={{ countMovies, setCountMovies }}
+      serverError={serverError}
       message={message}
       />
      </main>   

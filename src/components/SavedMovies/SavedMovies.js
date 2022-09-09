@@ -14,6 +14,7 @@ function SavedMovies(props) {
     deleteSavedMovie,
     filmsInputSearch,
     setFilmsInputSearch,
+    serverError,
     message,
     loggedIn,
   } = props;
@@ -34,6 +35,7 @@ function SavedMovies(props) {
       deleteSavedMovie={deleteSavedMovie}
       pathSavedMovie={true}
       count={{ countMovies, setCountMovies }}
+      serverError={serverError}
       message={message}
       />
      <div className="more-movies-card"></div>

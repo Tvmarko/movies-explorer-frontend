@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Form from "../Form/Form";
 
 
-function Login({handleLogin, loggedIn, }) {
+function Login({handleLogin, loggedIn, serverError}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [emailError, setEmailError] = useState("");
@@ -98,7 +98,12 @@ function Login({handleLogin, loggedIn, }) {
           </span>
       </label>
       
-      <div className="form__text-error form__response"></div>
+      {serverError.failed && (
+            <span className="form__response">
+              {serverError.message}
+            </span>
+          )}
+
       <button 
        className={`form__button form__button_login ${!formValid  ? "form__button_inactive" : ""}`}
        type="submit"

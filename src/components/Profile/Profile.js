@@ -4,7 +4,7 @@ import Header from "../Header/Header";
 import {Link} from "react-router-dom";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 
-function Profile({ loggedIn, onSignOut, editProfile }) {
+function Profile({ loggedIn, onSignOut, editProfile, serverError, setServerError }) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,6 +49,10 @@ function Profile({ loggedIn, onSignOut, editProfile }) {
       setNameError("");
     }
     setName(evt.target.value);
+    setServerError({
+      failed: false,
+      message: "",
+    });
   }
   
   function handleEmailChange(evt) {
@@ -113,6 +117,13 @@ function Profile({ loggedIn, onSignOut, editProfile }) {
           <span className="profile__input-error">{emailError}</span>
         </div>
       </div>
+
+      {serverError.failed && (
+            <span className="form__response">
+              {serverError.message}
+            </span>
+          )}
+
         <button 
         className={`profile__button btn ${!formValid  ? "profile__button_inactive btn" : ""}`}
         type="submit"

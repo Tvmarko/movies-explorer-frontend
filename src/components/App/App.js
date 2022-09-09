@@ -23,11 +23,15 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isShortMovies, setIsShortMovies] = useState(false);
-  const [moviesMessage, setMoviesMessage] = useState("");
+  const [isSavedShortMovies, setIsSavedShortMovies] = useState(false);
   const [message, setMessage] = useState("");
   const [filmsInputSearch, setFilmsInputSearch] = useState('');
-  
-                   
+  const [savedFilmsInputSearch, setSavedFilmsInputSearch] = useState('');
+  const [serverError, setServerError] = useState({
+    failed: false,
+    message: "",
+  });
+                     
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if((token !== null)) {
@@ -55,8 +59,8 @@ function App() {
         }
       })
       .catch((err) => {
-        console.log(err); 
-      })
+        console.log(err);
+       });
   }
 }, [loggedIn, location, currentUser]);
 
@@ -78,26 +82,30 @@ useEffect(() => {
                 setMovies(JSON.parse(localStorage.getItem("foundMovieList")));
               }
               if (localStorageFilmsInputSearch && location.pathname === "/saved-movies") {
-                setFilmsInputSearch("");
+                setSavedFilmsInputSearch("");
                }
               const isShortMoviesStateFromStorage =
                 localStorage.getItem("!isShortMovies") === "true";
-                if (isShortMoviesStateFromStorage) {
-                setIsShortMovies(isShortMoviesStateFromStorage);
+                if (isShortMoviesStateFromStorage && location.pathname === "/movies") {
+                  setIsShortMovies(isShortMoviesStateFromStorage);
                 }
-            }
-}, [loggedIn, location, currentUser]);
+                if (location.pathname === "/saved-movies") {
+                  setIsSavedShortMovies("");
+                 }
+              }
+            // eslint-disable-next-line react-hooks/exhaustive-deps 
+}, [loggedIn, currentUser]);
 
 useEffect(() => {
   if (location.pathname === "/saved-movies") {
-    handleSearchSavedMovie(filmsInputSearch);
+    handleSearchSavedMovie(savedFilmsInputSearch);
   } else {
     if (filmsInputSearch) {
       handleSearchMovie(filmsInputSearch);
     }
   }
  // eslint-disable-next-line react-hooks/exhaustive-deps 
-  }, [isShortMovies, location.pathname]);
+  }, [isShortMovies, isSavedShortMovies, location.pathname]);
 
 function handleSearchMovie(keyword) {
   const movieList = JSON.parse(localStorage.getItem("movieList"));
@@ -110,10 +118,10 @@ function handleSearchMovie(keyword) {
       localStorage.setItem("foundMovieList", JSON.stringify(searchedMovies));
       localStorage.setItem("keyword", keyword);
       if (searchedMovies.length === 0) {
-        setMoviesMessage("Ничего не найдено");
+        setMessage("Ничего не найдено");
        } else {
         setMovies(searchedMovies);
-        setMoviesMessage("");
+        setMessage("");
       }
     }
   }
@@ -124,17 +132,17 @@ function handleSearchMovie(keyword) {
 
   function handleSearchSavedMovie(keyword) {
     const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
-    if (savedMovieList) {
+     if (savedMovieList) {
     let searchSavedMovies = savedMovieList.filter(
     (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())));
-     if (isShortMovies) {
+     if (isSavedShortMovies) {
         searchSavedMovies = filterShortMovies(searchSavedMovies)
       }
       if (searchSavedMovies.length === 0) {
-        setMoviesMessage("Ничего не найдено");
+        setMessage("У Вас нет сохраненных фильмов");
       } else {
         setSavedMovies(searchSavedMovies);
-       setMoviesMessage("");
+        setMessage("");
      }
    }
  }
@@ -174,6 +182,10 @@ function searchShortMovies() {
   localStorage.setItem("!isShortMovies", !isShortMovies);
 }
 
+function searchShortSavedMovies() {
+  setIsSavedShortMovies(!isSavedShortMovies);
+}
+
 function editProfile(user) {
   mainApi.editProfile(user)
   .then((userUpdatedData) => {
@@ -182,15 +194,14 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
+    setMessage("Данные обновлены");
    })
   .catch((err) => {
-    console.log(`Ошибка: ${err}`);
-    if (err.status === 409) {
-      setMessage("Пользователь с таким email уже существует");
-    } else {
-      setMessage("При изменении данных профиля произошла ошибка");
-    }
-   });
+    setServerError({
+      failed: true,
+      message: "Указанный email уже существует",
+    });
+})
 }
 
 function handleRegister(name, email, password) {
@@ -200,15 +211,15 @@ function handleRegister(name, email, password) {
       handleLogin(email, password);
       setCurrentUser(res);
      }
-})
+     setMessage("Вы успешно зарегистрировались!");
+  })
 .catch((err) => {
-  console.log(`Ошибка: ${err}`);
-  if (err === 409) {
-    setMessage("Пользователь с таким email уже существует");
-  } else {
-    setMessage("Ошибка при регистрации пользователя");
-  }
+  setServerError({
+    failed: true,
+    message: err.toString(),
   });
+  setMessage("Что-то пошло не так! Попробуйте ещё раз");
+  })
 }
 
 function handleLogin(email, password) {
@@ -217,21 +228,15 @@ function handleLogin(email, password) {
     if(data.token) {
       localStorage.setItem("jwt", data.token);
       setLoggedIn(true);
-      setMessage("");
       history.push("/movies");
     }
   })
   .catch((err) => {
-    console.log(`Ошибка: ${err}`);
-    setMessage("Ошибка при авторизации пользователя");
-        if (err === 401) {
-          setMessage("Пользователя с таким email не существует");
-        }
-        if (err === 400) {
-          setMessage("Неверный email или пароль");
-        }
-    localStorage.removeItem("jwt");
-  });
+    setServerError({
+      failed: true,
+      message: err.toString(),
+    });
+  })
   }
 
   function handleSignOut() {
@@ -245,7 +250,8 @@ function handleLogin(email, password) {
     setMovies([]);
     setSavedMovies([]);
     setCurrentUser({});
-    setFilmsInputSearch([]);
+    setFilmsInputSearch("");
+    setSavedFilmsInputSearch("");
     history.push('/');
   }
 
@@ -269,7 +275,8 @@ function handleLogin(email, password) {
             saveMovie={handleSaveMovie}
             searchMovies={handleSearchMovie}
             deleteMovie={handleMovieForDelete}
-            message={moviesMessage}
+            message={message}
+            serverError={serverError}
             filmsInputSearch={filmsInputSearch}
             setFilmsInputSearch={setFilmsInputSearch}
             component={Movies}>
@@ -279,31 +286,34 @@ function handleLogin(email, password) {
             movies={movies}
             savedMovies={savedMovies}
             searchMovies={handleSearchSavedMovie}
-            isShortMovie={isShortMovies}
-            searchShortMovies ={searchShortMovies}
+            isShortMovie={isSavedShortMovies}
+            searchShortMovies ={searchShortSavedMovies}
             deleteSavedMovie={handleDeleteMovie}
-            message={moviesMessage}
-            filmsInputSearch={filmsInputSearch}
-            setFilmsInputSearch={setFilmsInputSearch}
+            message={message}
+            serverError={serverError}
+            filmsInputSearch={savedFilmsInputSearch}
+            setFilmsInputSearch={setSavedFilmsInputSearch}
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">
           <Register 
            handleRegister={handleRegister} 
-           message={message}
-        />
+           serverError={serverError}
+           />
         </Route>
         <Route path="/signin">
           <Login 
             handleLogin={handleLogin} 
             loggedIn={loggedIn}
-            message={message}
-        />
+            serverError={serverError}
+            />
         </Route>
         <ProtectedRoute path="/profile"
          loggedIn={loggedIn}
          onSignOut={handleSignOut}
          editProfile={editProfile}
+         serverError={serverError}
+         setServerError={setServerError}
          component={Profile}>
         </ProtectedRoute>
         <Route path="*">
