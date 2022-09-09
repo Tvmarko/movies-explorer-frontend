@@ -139,7 +139,7 @@ function handleSearchMovie(keyword) {
         searchSavedMovies = filterShortMovies(searchSavedMovies)
       }
       if (searchSavedMovies.length === 0) {
-        setMessage("У Вас нет сохраненных фильмов");
+        setMessage("Нет фильмов");
       } else {
         setSavedMovies(searchSavedMovies);
         setMessage("");
@@ -194,8 +194,7 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
-    setMessage("Данные обновлены");
-   })
+  })
   .catch((err) => {
     setServerError({
       failed: true,
@@ -211,15 +210,13 @@ function handleRegister(name, email, password) {
       handleLogin(email, password);
       setCurrentUser(res);
      }
-     setMessage("Вы успешно зарегистрировались!");
-  })
+    })
 .catch((err) => {
   setServerError({
     failed: true,
     message: err.toString(),
   });
-  setMessage("Что-то пошло не так! Попробуйте ещё раз");
-  })
+ })
 }
 
 function handleLogin(email, password) {
