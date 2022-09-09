@@ -98,7 +98,7 @@ function Profile({ loggedIn, onSignOut, editProfile }) {
           <div className="profile__input-container">
             <p className="profile__text">E-mail</p>
             <input 
-            className={`profile__input ${changedEmail && nameError ? "profile__input-error" : ""}`}
+            className={`profile__input ${changedEmail && emailError ? "profile__input-error" : ""}`}
             value={email || ""}
             onChange={handleEmailChange}
             placeholder="Email" 

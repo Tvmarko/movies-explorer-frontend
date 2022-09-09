@@ -5,6 +5,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 function Navigation({ toggleMenu, isMenuOpen }) {
   const isMovies = useRouteMatch({ path: "/movies", exact: false });
   const isSavedMovies = useRouteMatch({ path: "/saved-movies", exact: false });
+  const isMain = useRouteMatch({ path: "/", exact: true });
 
   return(
     <nav className="navigation" >
@@ -21,14 +22,14 @@ function Navigation({ toggleMenu, isMenuOpen }) {
             </li>
             <li className="navigation__item">
               <Link
-                className={`navigation__item-link link ${isMovies ? "link_active" : ""}`}
+                className={`navigation__item-link link ${isMovies ? "link_active" : ""}${isMain ? "navigation__item-link_main" : ""}`}
                 to="/movies">
                 Фильмы
               </Link>
             </li>
             <li className="navigation__item">
               <Link
-                className={`navigation__item-link link ${isSavedMovies ? "link_active" : ""}`}
+                className={`navigation__item-link link ${isSavedMovies ? "link_active" : ""}${isMain ? "navigation__item-link_main" : ""}`}
                 to="/saved-movies">
                 Сохранённые фильмы
               </Link>
@@ -36,7 +37,7 @@ function Navigation({ toggleMenu, isMenuOpen }) {
           </ul>
         </div>
         <Link to="/profile" 
-          className="navigation__profile link">
+          className={`navigation__profile link ${isMain ? "navigation__profile_main" : ""}`}>
             Аккаунт<span className={`header__account-icon ${isMenuOpen ? "account2": "account"}`}></span>
         </Link>
        </div>

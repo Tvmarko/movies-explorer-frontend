@@ -29,7 +29,6 @@ function SavedMovies(props) {
        filmsInputSearch={filmsInputSearch}
        setFilmsInputSearch={setFilmsInputSearch}
        />
-      {savedMovies.length > 0 ? (
       <MoviesCardList 
       movies={savedMovies}
       deleteSavedMovie={deleteSavedMovie}
@@ -37,10 +36,7 @@ function SavedMovies(props) {
       count={{ countMovies, setCountMovies }}
       message={message}
       />
-      ) : (
-        <p className="movies-message">У вас пока нет сохраненных фильмов</p>
-      )}
-      <div className="more-movies-card"></div>
+     <div className="more-movies-card"></div>
     </main>
     <Footer />
     </>

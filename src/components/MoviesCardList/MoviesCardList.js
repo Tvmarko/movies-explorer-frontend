@@ -2,6 +2,19 @@ import React, { useState, useEffect, Suspense } from 'react';
 import "./MoviesCardList.css";
 import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
+import {
+  BIGScreen,
+  MEDIUMScreen,
+  SMALLScreen,
+  CardsNumberBIG,
+  CardsNumberMEDIUM,
+  CardsNumberSMALLER,
+  CardsNumberSMALL,
+  CardsAddMoreBIG,
+  CardsAddMoreMEDIUM,
+  CardsAddMoreSMALLER,
+  CardsAddMoreSMALL,
+} from "../../utils/config";
 
 function MoviesCardList(props) {
   const {
@@ -24,18 +37,18 @@ function MoviesCardList(props) {
    const widthCheck = () => {
     const width = window.innerWidth;
 
-      if (width > 1270) {
-        count.setCountMovies(12);
-        setAddMoreMovies(4);
-      } else if (width <= 1270 && width > 1020) {
-        count.setCountMovies(9);
-        setAddMoreMovies(3);
-      } else if (width <= 1020 && width > 650) {
-        count.setCountMovies(8);
-        setAddMoreMovies(2);
-      } else if (width <= 650) {
-        count.setCountMovies(5);
-        setAddMoreMovies(1);
+      if (width > BIGScreen) {
+        count.setCountMovies(CardsNumberBIG);
+        setAddMoreMovies(CardsAddMoreBIG);
+      } else if (width <= BIGScreen && width > MEDIUMScreen) {
+        count.setCountMovies(CardsNumberMEDIUM);
+        setAddMoreMovies(CardsAddMoreMEDIUM);
+      } else if (width <= MEDIUMScreen && width > SMALLScreen) {
+        count.setCountMovies(CardsNumberSMALLER);
+        setAddMoreMovies(CardsAddMoreSMALLER);
+      } else if (width <= SMALLScreen) {
+        count.setCountMovies(CardsNumberSMALL);
+        setAddMoreMovies(CardsAddMoreSMALL);
       }
     }
    

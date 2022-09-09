@@ -56,12 +56,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err); 
-        setMessage({
-          successful: false,
-          message:
-            "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
-        });
-    })
+      })
   }
 }, [loggedIn, location, currentUser]);
 
@@ -75,12 +70,7 @@ useEffect(() => {
               })
               .catch((err) => {
                 console.log(err);
-                setMessage({
-                  successful: false,
-                  message:
-                    "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
-                });
-              });
+               });
 
               const localStorageFilmsInputSearch = localStorage.getItem("keyword");
               if (localStorageFilmsInputSearch && location.pathname === "/movies") {
@@ -150,16 +140,16 @@ function handleSearchMovie(keyword) {
  }
  
  function handleSaveMovie(movie) {
-    mainApi
-      .addMovie(movie)
-      .then((userAddedMovie) => {
-          localStorage.setItem("savedMovieList", JSON.stringify(userAddedMovie));
-          setSavedMovies([JSON.parse(localStorage.getItem("savedMovieList")), ...savedMovies]);
-        })
-      .catch((err) => {
-        console.log(`Ошибка при сохранении фильма: ${err}`);
-      });
-  }
+  mainApi
+    .addMovie(movie)
+    .then((userAddedMovie) => {
+        localStorage.setItem("savedMovieList", JSON.stringify([userAddedMovie, ...savedMovies]));
+        setSavedMovies([userAddedMovie, ...savedMovies]);
+      })
+    .catch((err) => {
+      console.log(`Ошибка при сохранении фильма: ${err}`);
+    });
+}
 
 	function handleDeleteMovie(movie) {
 		mainApi
@@ -192,11 +182,7 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
-    setMessage({
-      successful: true,
-      message: "Профиль обновлен",
-    });
-  })
+   })
   .catch((err) => {
     console.log(`Ошибка: ${err}`);
     if (err.status === 409) {
@@ -213,11 +199,7 @@ function handleRegister(name, email, password) {
     if (res) {
       handleLogin(email, password);
       setCurrentUser(res);
-      setMessage({
-        successful: true,
-        message: "Вы успешно зарегистрировались!",
-      });
-    }
+     }
 })
 .catch((err) => {
   console.log(`Ошибка: ${err}`);

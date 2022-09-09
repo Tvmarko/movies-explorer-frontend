@@ -60,6 +60,10 @@
   padding: 0;
 }
 
+.navigation__item-link_main {
+  color: #fff;
+}
+
 .navigation__profile {
   display: flex;
   align-items: center;
@@ -70,6 +74,10 @@
   font-size: 14px;
   line-height: 16px;
   color: #000;
+}
+
+.navigation__profile_main {
+  color: #fff;
 }
 
 .header__account-icon {

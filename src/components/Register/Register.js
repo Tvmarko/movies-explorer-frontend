@@ -1,7 +1,7 @@
 import React, { useState,  useEffect } from "react";
 import Form from "../Form/Form";
 
-function Register({handleRegister, message}) {
+function Register({handleRegister}) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -123,9 +123,7 @@ function Register({handleRegister, message}) {
           </span>
       </label>
 
-      <div className="form__text-error form__response">
-            {message}
-      </div>
+      <div className="form__text-error form__response"></div>
       <button className={`form__button ${!formValid  ? "form__button_inactive" : ""}`} 
       type="submit"
       disabled={!formValid}>
