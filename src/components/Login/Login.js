@@ -67,7 +67,7 @@ function Login({handleLogin, loggedIn, serverError}) {
             id="email-input"
             type="email"
             name="email"
-            value={email}
+            value={email || ''}
             placeholder="Email"
             minLength="8"
             maxLength="30"
@@ -86,7 +86,7 @@ function Login({handleLogin, loggedIn, serverError}) {
           id="password-input"
           type="password"
           name="password"
-          value={password}
+          value={password || ''}
           placeholder="Пароль"
           minLength="8"
           maxLength="30"

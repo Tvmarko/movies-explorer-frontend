@@ -73,7 +73,7 @@ function Register({handleRegister, serverError}) {
           className={`form__field ${nameError ? "form__text-error" : ""}`} 
           id="name-input"
           name="name"
-          value={name}
+          value={name || ''}
           placeholder="Name"
           minLength="2" 
           maxLength="20"
@@ -92,7 +92,7 @@ function Register({handleRegister, serverError}) {
           id="email-input"
           type="email"
           name="email"
-          value={email}
+          value={email || ''}
           placeholder="Email"
           minLength="6" 
           maxLength="30"
@@ -111,7 +111,7 @@ function Register({handleRegister, serverError}) {
             id="password-input"
             type="password"
             name="password"
-            value={password}
+            value={password || ''}
             placeholder="Пароль"
             minLength="8" 
             maxLength="12"

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import "./MoviesCardList.css";
-import MoviesCard from "../MoviesCard/MoviesCard";
 import Preloader from "../Preloader/Preloader";
 import {
   BIGScreen,
@@ -15,6 +14,7 @@ import {
   CardsAddMoreSMALLER,
   CardsAddMoreSMALL,
 } from "../../utils/config";
+const MoviesCard = React.lazy(() => import("../MoviesCard/MoviesCard")); // Ленивая загрузка
 
 function MoviesCardList(props) {
   const {

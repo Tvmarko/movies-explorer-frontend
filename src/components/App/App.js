@@ -14,6 +14,7 @@ import Register from "../Register/Register";
 import Login from "../Login/Login";
 import { mainApi } from "../../utils/MainApi";
 import { moviesApi } from "../../utils/MoviesApi";
+import { ShortMovieDuration } from "../../utils/config";
 
 function App() {
   const history = useHistory();
@@ -127,7 +128,7 @@ function handleSearchMovie(keyword) {
   }
     
   function filterShortMovies(moviesArr) {
-    return moviesArr.filter((movie) => movie.duration <= 40);
+    return moviesArr.filter((movie) => movie.duration <= ShortMovieDuration);
   }
 
   function handleSearchSavedMovie(keyword) {
