@@ -74,6 +74,7 @@ function Profile({ loggedIn, onSignOut, editProfile, serverError, setServerError
     evt.preventDefault();
     editProfile({name, email});
     handleRedactClick();
+    evt.target.reset();
   }
 
  return (

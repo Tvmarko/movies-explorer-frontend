@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "./App.css";
-import { Route, Switch, useHistory, useLocation } from "react-router-dom";
+import { Route, Switch, useHistory, useLocation, Redirect } from "react-router-dom";
 import { CurrentUserContext } from "../../context/CurrentUserContext";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Footer from "../Footer/Footer";
@@ -23,6 +23,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [movies, setMovies] = useState([]);
   const [savedMovies, setSavedMovies] = useState([]);
+  const [foundSavedMovies, setFoundSavedMovies] = useState([]);
   const [isShortMovies, setIsShortMovies] = useState(false);
   const [isSavedShortMovies, setIsSavedShortMovies] = useState(false);
   const [message, setMessage] = useState("");
@@ -99,6 +100,15 @@ useEffect(() => {
 
 useEffect(() => {
   if (location.pathname === "/saved-movies") {
+    setSavedFilmsInputSearch("");
+    setIsSavedShortMovies(false);
+  }
+ // eslint-disable-next-line react-hooks/exhaustive-deps 
+  }, [location.pathname]);
+
+
+useEffect(() => {
+  if (location.pathname === "/saved-movies") {
     handleSearchSavedMovie(savedFilmsInputSearch);
   } else {
     if (filmsInputSearch) {
@@ -133,7 +143,7 @@ function handleSearchMovie(keyword) {
 
   function handleSearchSavedMovie(keyword) {
     const savedMovieList = JSON.parse(localStorage.getItem("savedMovieList"));
-     if (savedMovieList) {
+    if (savedMovieList) {
     let searchSavedMovies = savedMovieList.filter(
     (item) => (item.nameRU.toLowerCase().includes(keyword.toLowerCase())));
      if (isSavedShortMovies) {
@@ -142,7 +152,7 @@ function handleSearchMovie(keyword) {
       if (searchSavedMovies.length === 0) {
         setMessage("Нет фильмов");
       } else {
-        setSavedMovies(searchSavedMovies);
+        setFoundSavedMovies(searchSavedMovies)
         setMessage("");
      }
    }
@@ -165,6 +175,8 @@ function handleSearchMovie(keyword) {
       .deleteMovie(movie.movieId)
       .then(() => {
         const res = savedMovies.filter((item) => item.movieId !== movie.movieId);
+        const filteredSavedFoundedMovies = foundSavedMovies.filter((item) => item.movieId !== movie.movieId);
+        setFoundSavedMovies(filteredSavedFoundedMovies)
         localStorage.setItem("savedMovieList", JSON.stringify(res));
         setSavedMovies(JSON.parse(localStorage.getItem("savedMovieList")));
       })
@@ -282,7 +294,7 @@ function handleLogin(email, password) {
         <ProtectedRoute path="/saved-movies"
             loggedIn={loggedIn}
             movies={movies}
-            savedMovies={savedMovies}
+            savedMovies={foundSavedMovies}
             searchMovies={handleSearchSavedMovie}
             isShortMovie={isSavedShortMovies}
             searchShortMovies ={searchShortSavedMovies}
@@ -294,17 +306,25 @@ function handleLogin(email, password) {
             component={SavedMovies}>
         </ProtectedRoute>
          <Route path="/signup">
+         {loggedIn ? (
+                <Redirect to="/movies" />
+              ) : (
           <Register 
            handleRegister={handleRegister} 
            serverError={serverError}
            />
+           )}
         </Route>
         <Route path="/signin">
+        {loggedIn ? (
+                <Redirect to="/movies" />
+              ) : (
           <Login 
             handleLogin={handleLogin} 
             loggedIn={loggedIn}
             serverError={serverError}
             />
+            )}
         </Route>
         <ProtectedRoute path="/profile"
          loggedIn={loggedIn}
