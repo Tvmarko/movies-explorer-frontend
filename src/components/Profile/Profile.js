@@ -4,7 +4,7 @@ import Header from "../Header/Header";
 import {Link} from "react-router-dom";
 import { CurrentUserContext } from '../../context/CurrentUserContext';
 
-function Profile({ loggedIn, onSignOut, editProfile, serverError, setServerError }) {
+function Profile({ loggedIn, onSignOut, editProfile, serverError, setServerError, infoMessage }) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,7 +14,7 @@ function Profile({ loggedIn, onSignOut, editProfile, serverError, setServerError
   const [changedName, setChangedName] = useState(false);
   const [changedEmail, setChangedEmail] = useState(false);
   const [isInputInactive, setIsInputInactive] = useState(true);
-  
+    
   useEffect(() => {
     setName(currentUser.name);
     setEmail(currentUser.email);
@@ -121,7 +121,7 @@ function Profile({ loggedIn, onSignOut, editProfile, serverError, setServerError
 
       {serverError.failed && (
             <span className="form__response">
-              {serverError.message}
+              {serverError.message} 
             </span>
           )}
 

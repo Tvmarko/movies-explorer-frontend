@@ -100,15 +100,6 @@ useEffect(() => {
 
 useEffect(() => {
   if (location.pathname === "/saved-movies") {
-    setSavedFilmsInputSearch("");
-    setIsSavedShortMovies(false);
-  }
- // eslint-disable-next-line react-hooks/exhaustive-deps 
-  }, [location.pathname]);
-
-
-useEffect(() => {
-  if (location.pathname === "/saved-movies") {
     handleSearchSavedMovie(savedFilmsInputSearch);
   } else {
     if (filmsInputSearch) {
@@ -117,6 +108,25 @@ useEffect(() => {
   }
  // eslint-disable-next-line react-hooks/exhaustive-deps 
   }, [isShortMovies, isSavedShortMovies, location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname === "/saved-movies") {
+      setSavedFilmsInputSearch("");
+      setIsSavedShortMovies(false);
+      setFoundSavedMovies(savedMovies);
+    }
+   // eslint-disable-next-line react-hooks/exhaustive-deps 
+    }, [location.pathname]);
+
+    useEffect(() => {
+      if (location.pathname === "/profile" || location.pathname === "/signin" || location.pathname === "/signup") {
+        setServerError({
+          failed: false,
+          message: "",
+        });
+      }
+     // eslint-disable-next-line react-hooks/exhaustive-deps 
+      }, [location.pathname]);
 
 function handleSearchMovie(keyword) {
   const movieList = JSON.parse(localStorage.getItem("movieList"));
@@ -167,6 +177,7 @@ function handleSearchMovie(keyword) {
       })
     .catch((err) => {
       console.log(`Ошибка при сохранении фильма: ${err}`);
+      setMessage("Ошибка при сохранении фильма");
     });
 }
 
@@ -207,13 +218,17 @@ function editProfile(user) {
       name: userUpdatedData.name,
       email: userUpdatedData.email,
     });
+    setServerError({
+      failed: true,
+      message: "Данные обновлены",
+    });
   })
   .catch((err) => {
     setServerError({
       failed: true,
       message: "Указанный email уже существует",
     });
-})
+  })
 }
 
 function handleRegister(name, email, password) {
@@ -222,6 +237,10 @@ function handleRegister(name, email, password) {
     if (res) {
       handleLogin(email, password);
       setCurrentUser(res);
+      setServerError({
+        successful: false,
+        message: "Вы успешно зарегистрировались!",
+      });
      }
     })
 .catch((err) => {
@@ -229,7 +248,7 @@ function handleRegister(name, email, password) {
     failed: true,
     message: err.toString(),
   });
- })
+  })
 }
 
 function handleLogin(email, password) {
